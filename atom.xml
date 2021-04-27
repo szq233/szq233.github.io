@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Szq233的博客站</title>
+  
+  
+  <link href="http://example.com/atom.xml" rel="self"/>
+  
+  <link href="http://example.com/"/>
+  <updated>2021-04-27T10:57:43.116Z</updated>
+  <id>http://example.com/</id>
+  
+  <author>
+    <name>Szq233</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>newpagename</title>
+    <link href="http://example.com/2021/04/27/newpagename/"/>
+    <id>http://example.com/2021/04/27/newpagename/</id>
+    <published>2021-04-27T10:57:24.000Z</published>
+    <updated>2021-04-27T10:57:43.116Z</updated>
+    
+    <content type="html"><![CDATA[<p>测试测试测试测试</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;测试测试测试测试&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://example.com/2021/04/27/hello-world/"/>
+    <id>http://example.com/2021/04/27/hello-world/</id>
+    <published>2021-04-27T09:38:55.496Z</published>
+    <updated>2021-04-27T15:22:17.191Z</updated>
+    
+    <content type="html"><![CDATA[<p>Hello World</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;Hello World&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+</feed>
