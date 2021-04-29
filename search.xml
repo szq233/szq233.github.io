@@ -54,4 +54,23 @@
         <tag>测试</tag>
       </tags>
   </entry>
+  <entry>
+    <title>关闭NexT主题动画导致侧边栏消失</title>
+    <url>/2021/04/30/%E5%85%B3%E9%97%ADNexT%E4%B8%BB%E9%A2%98motion%E5%AF%BC%E8%87%B4%E4%BE%A7%E8%BE%B9%E6%A0%8F%E6%B6%88%E5%A4%B1/</url>
+    <content><![CDATA[<h6 id="概要：关于Hexo的NexT主题关闭motion动画导致侧边栏消失的解决方法……"><a href="#概要：关于Hexo的NexT主题关闭motion动画导致侧边栏消失的解决方法……" class="headerlink" title="概要：关于Hexo的NexT主题关闭motion动画导致侧边栏消失的解决方法……"></a><em>概要：关于Hexo的NexT主题关闭motion动画导致侧边栏消失的解决方法……</em></h6><h5 id="起因："><a href="#起因：" class="headerlink" title="起因："></a>起因：</h5><p>最近上手Hexo搭建博客，顺利搭建博客并一眼相中NexT这类简约风格的主题样式。</p>
+<p>最初，NexT主题因为搭载的<a href="https://theme-next.js.org/animate/%E7%9A%84CSS%E5%8A%A8%E7%94%BB%E5%BC%95%E6%93%8E%EF%BC%8C%E7%AC%AC%E4%B8%80%E7%9C%BC%E9%82%A3%E4%B8%9D%E6%BB%91%E7%9A%84%E5%8A%A8%E7%94%BB%E7%A1%AE%E5%AE%9E%E7%89%B9%E5%88%AB%E6%83%B9%E7%9C%BC%EF%BC%8C%E4%BD%86%E7%94%B1%E4%BA%8E%E4%B8%AA%E4%BA%BA%E5%96%9C%E5%A5%BD%E6%9E%81%E9%80%9F%E7%AE%80%E7%BA%A6%EF%BC%8C%E4%BE%BF%E5%9C%A8%E7%BD%91%E7%BB%9C%E4%B8%8A%E6%90%9C%E7%B4%A2%E5%85%B3%E9%97%ADNexT%E4%B8%BB%E9%A2%98%E8%BF%87%E6%B8%A1%E5%8A%A8%E7%94%BB%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%8C%E6%8C%89%E7%BD%91%E7%BB%9C%E4%B8%8A%E8%AF%B4%E6%B3%95%E5%B0%86%E4%B8%BB%E9%A2%98%E6%A0%B9%E7%9B%AE%E5%BD%95%E4%B8%8B_config.yml%E6%96%87%E4%BB%B6%E7%9A%84%60motion%EF%BC%9A">https://theme-next.js.org/animate/的CSS动画引擎，第一眼那丝滑的动画确实特别惹眼，但由于个人喜好极速简约，便在网络上搜索关闭NexT主题过渡动画的方法，按网络上说法将主题根目录下_config.yml文件的`motion：</a> enable：true<code>修改为</code>enable：false`，确实完成了动画的关闭，但拥有小部件和头像功能的侧边栏消失。</p>
+<p>花了段时间找问题，在打开浏览器调试功能时，发现.sidebar元素被赋予了<code>visiblity：hidden</code>属性，在修改为<code>visiblity：visible</code>后，侧边栏再次可见。于是尝试找样式源文件，最终解决问题。</p>
+<h5 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h5><p>因为我用的NexT主题的Pisces的scheme，其他类型的可以参照尝试解决，找到主题文件夹如下图路径中的_sidebar.styl文件，打开该文件。</p>
+<p><img src="/2021/04/30/%E5%85%B3%E9%97%ADNexT%E4%B8%BB%E9%A2%98motion%E5%AF%BC%E8%87%B4%E4%BE%A7%E8%BE%B9%E6%A0%8F%E6%B6%88%E5%A4%B1/03.png"></p>
+<p>搜索visibility，将visibility: hidden;修改为visibility: visible;</p>
+<p><img src="/2021/04/30/%E5%85%B3%E9%97%ADNexT%E4%B8%BB%E9%A2%98motion%E5%AF%BC%E8%87%B4%E4%BE%A7%E8%BE%B9%E6%A0%8F%E6%B6%88%E5%A4%B1/04.png"></p>
+<p>保存，执行hexo cl、hexo g、hexo d稍微等待一会，刷新博客，发现侧边栏可以正常显示</p>
+]]></content>
+      <categories>
+        <category>NexT&amp;Hexo</category>
+      </categories>
+      <tags>
+        <tag>NexT&amp;Hexo</tag>
+      </tags>
+  </entry>
 </search>
