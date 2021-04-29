@@ -67,10 +67,10 @@
 <p>保存，执行hexo cl、hexo g、hexo d稍微等待一会，刷新博客，发现侧边栏可以正常显示</p>
 ]]></content>
       <categories>
-        <category>NexT/Hexo</category>
+        <category>NexT;Hexo</category>
       </categories>
       <tags>
-        <tag>NexT/Hexo</tag>
+        <tag>NexT+Hexo</tag>
       </tags>
   </entry>
 </search>
