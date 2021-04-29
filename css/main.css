@@ -1736,6 +1736,13 @@ pre code {
   width: 100%;
   z-index: 1500;
 }
+body {
+  background-image: url("/images/background.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50% 50%;
+  background-size: 100% 100%;
+}
 .rtl.post-body p,
 .rtl.post-body a,
 .rtl.post-body h1,
