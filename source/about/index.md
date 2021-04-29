@@ -1,6 +1,7 @@
 ---
-title: about
+title: 关于
 date: 2021-04-27 22:31:34
+type: about
 ---
 
 **阿强的博客**
