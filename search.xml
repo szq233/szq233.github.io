@@ -46,15 +46,6 @@
       </tags>
   </entry>
   <entry>
-    <title>newpagename2</title>
-    <url>/2021/04/28/newpagename2/</url>
-    <content><![CDATA[<p>测试2测试2测试2</p>
-]]></content>
-      <tags>
-        <tag>测试</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>关闭NexT主题动画导致侧边栏消失</title>
     <url>/2021/04/30/%E5%85%B3%E9%97%ADNexT%E4%B8%BB%E9%A2%98motion%E5%AF%BC%E8%87%B4%E4%BE%A7%E8%BE%B9%E6%A0%8F%E6%B6%88%E5%A4%B1/</url>
     <content><![CDATA[<h6 id="概要：关于Hexo的NexT主题关闭motion动画导致侧边栏消失的解决方法……"><a href="#概要：关于Hexo的NexT主题关闭motion动画导致侧边栏消失的解决方法……" class="headerlink" title="概要：关于Hexo的NexT主题关闭motion动画导致侧边栏消失的解决方法……"></a><em>概要：关于Hexo的NexT主题关闭motion动画导致侧边栏消失的解决方法……</em></h6><h6 id><a href="#" class="headerlink" title></a><span id="more"></span></h6><h5 id="起因："><a href="#起因：" class="headerlink" title="起因："></a>起因：</h5><p>最近上手Hexo搭建博客，顺利搭建博客并一眼相中NexT这类简约风格的主题样式。</p>
@@ -73,6 +64,15 @@
       <tags>
         <tag>Hexo</tag>
         <tag>NexT</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>newpagename2</title>
+    <url>/2021/04/28/newpagename2/</url>
+    <content><![CDATA[<p>测试2测试2测试2</p>
+]]></content>
+      <tags>
+        <tag>测试</tag>
       </tags>
   </entry>
 </search>
