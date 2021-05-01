@@ -1517,7 +1517,6 @@ pre code {
   margin: 0;
   padding: 0 2px 5px 10px;
   text-align: left;
-  font-size: 13px;
 }
 .post-toc ol > ol {
   padding-left: 0;
@@ -1532,7 +1531,7 @@ pre code {
   white-space: nowrap;
 }
 .post-toc .nav .nav-child {
-  display: block;
+  display: none;
 }
 .post-toc .nav .active > .nav-child {
   display: block;
