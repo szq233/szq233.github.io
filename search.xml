@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>newpagename</title>
-    <url>/2021/04/27/newpagename/</url>
-    <content><![CDATA[<p>测试测试测试测试</p>
-]]></content>
-      <tags>
-        <tag>测试</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hello World</title>
     <url>/2021/04/27/hello-world/</url>
     <content><![CDATA[<p>Hello World</p>
@@ -43,6 +34,15 @@
       </categories>
       <tags>
         <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>newpagename</title>
+    <url>/2021/04/27/newpagename/</url>
+    <content><![CDATA[<p>测试测试测试测试</p>
+]]></content>
+      <tags>
+        <tag>测试</tag>
       </tags>
   </entry>
   <entry>
