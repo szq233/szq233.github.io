@@ -1093,7 +1093,7 @@ pre code {
   }
 }
 .pagination .space {
-  margin: 10px;
+  margin: 0;
   padding: 0;
 }
 .pagination .page-number.current {
@@ -1789,8 +1789,8 @@ body {
   visibility: hidden;
 }
 .posts-collapse .post-content {
-  margin-bottom: 35px;
-  margin-left: 35px;
+  margin-bottom: 50px;
+  margin-left: 50px;
   position: relative;
 }
 @media (max-width: 767px) {
@@ -2120,7 +2120,7 @@ body {
   gap: 30px;
   justify-content: space-between;
   margin-top: 1em;
-  padding: 10px 5px 0;
+  padding: 10px 5px 10px;
 }
 .post-nav-item {
   flex: 1;
@@ -2154,7 +2154,7 @@ body {
 .post-eof {
   background: #ccc;
   height: 1px;
-  margin: 80px auto 60px;
+  margin: 50px auto 50px;
   width: 8%;
 }
 .post-block:last-of-type .post-eof {
@@ -2593,7 +2593,7 @@ mark.search-keyword {
 }
 .header-inner {
   background: var(--content-bg-color);
-  border-radius: initial;
+  border-radius: 10px;
   box-shadow: initial;
   width: 240px;
 }
@@ -2627,7 +2627,7 @@ mark.search-keyword {
   }
 }
 .main-inner {
-  border-radius: initial;
+  border-radius: 10px;
   box-sizing: border-box;
   width: calc(100% - 252px);
 }
@@ -2768,7 +2768,7 @@ mark.search-keyword {
 }
 .sidebar-inner {
   background: var(--content-bg-color);
-  border-radius: initial;
+  border-radius: 10px;
   box-shadow: initial;
   box-sizing: border-box;
   color: var(--text-color);
@@ -2824,8 +2824,9 @@ mark.search-keyword {
 }
 .main-inner {
   background: var(--content-bg-color);
+  background-color: rgba(255,255,255,0.85);
   box-shadow: initial;
-  padding: 40px;
+  padding: 0 9px;
 }
 @media (max-width: 991px) {
   .main-inner {
@@ -2835,11 +2836,24 @@ mark.search-keyword {
 .sub-menu {
   border-bottom: 1px solid #ddd;
 }
+.post-block {
+  padding: 20px 20px 0;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+.post-eof {
+  margin: 30px auto 20px;
+}
 .post-block:first-of-type {
-  padding-top: 40px;
+  margin-top: 9px;
 }
 @media (max-width: 767px) {
   .pagination {
     margin-bottom: 10px;
   }
+}
+#lv-container {
+  background-color: rgba(255,255,255,0.85);
+  border-radius: 10px;
+  padding: 0 15px;
 }
