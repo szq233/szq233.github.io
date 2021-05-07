@@ -1093,7 +1093,7 @@ pre code {
   }
 }
 .pagination .space {
-  margin: 0;
+  margin: 10px;
   padding: 0;
 }
 .pagination .page-number.current {
