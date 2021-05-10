@@ -5,7 +5,7 @@ tags: [Hexo, NexT]
 categories:	[Hexo, NexT]
 ---
 
-###### *概要：关于Hexo的NexT主题关闭motion动画导致侧边栏消失的解决方法......*
+*概要：关于Hexo的NexT主题关闭motion动画导致侧边栏消失的解决方法......*
 
 ###### <!--more-->
 
