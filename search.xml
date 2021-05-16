@@ -14,7 +14,7 @@
 
 <h4 id="关于js中-proto-和prototype的说明"><a href="#关于js中-proto-和prototype的说明" class="headerlink" title="关于js中__proto__和prototype的说明"></a>关于js中__proto__和prototype的说明</h4><h5 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h5><p> __proto__是浏览器对实例化对象中[[prototype]]属性的命名，__proto__是属于对象的属性，prototype是属于函数对象的属性。</p>
 <h5 id="功能："><a href="#功能：" class="headerlink" title="功能："></a>功能：</h5><p>__proto__是访问prototype的入口。</p>
-<h4 id="个人解读："><a href="#个人解读：" class="headerlink" title="个人解读："></a>个人解读：</h4><h5 id="区别：-1"><a href="#区别：-1" class="headerlink" title="区别："></a>区别：</h5><p>prototype可以理解为在函数（函数对象）上的一个名为叫原型对象的属性，这里的原型对象是命名和功能意义双重含义的，所以prototype是函数（函数对象）上的一个属性，保存原型对象，意义上也可以叫做原型对象。那么这个原型对象的内容是一些可以继承的属性和方法。而__proto__是对象上的一个属性，通过这个属性可以访问prototype这个函数对象上的属性里的内容，也就是说<code>对象.__proto__</code>指向构造该对象的<code>函数.prototype</code>。</p>
+<h4 id="个人解读："><a href="#个人解读：" class="headerlink" title="个人解读："></a>个人解读：</h4><h5 id="区别：-1"><a href="#区别：-1" class="headerlink" title="区别："></a>区别：</h5><p>prototype可以理解为在函数（函数对象）上的一个名为原型对象的属性，这里的原型对象是命名和功能意义双重含义的，所以prototype是函数（函数对象）上的一个属性，保存原型对象，意义上也可以叫做原型对象。那么这个原型对象的内容是一些可以继承的属性和方法。而__proto__是对象上的一个属性，通过这个属性可以访问prototype这个函数对象上的属性里的内容，也就是说<code>对象.__proto__</code>指向构造该对象的<code>函数.prototype</code>。</p>
 <p>比如：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Fn1</span>(<span class="params">...</span>)</span>&#123;...&#125;; <span class="comment">//构造函数</span></span><br><span class="line"><span class="keyword">let</span> obj1 = <span class="keyword">new</span> Fn1(...); <span class="comment">//new一个对象</span></span><br><span class="line">obj1.__proto__ === Fn1.prototype; <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
 
@@ -97,6 +97,40 @@
       <tags>
         <tag>Hexo</tag>
         <tag>NexT</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>正向代理与反向代理</title>
+    <url>/2021/05/16/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
+    <content><![CDATA[<p><em>概要：正向代理与反向代理的简述和区别……</em></p>
+<span id="more"></span>
+
+<h3 id="简述："><a href="#简述：" class="headerlink" title="简述："></a>简述：</h3><h4 id="一、代理的概念："><a href="#一、代理的概念：" class="headerlink" title="一、代理的概念："></a>一、代理的概念：</h4><p>类似于一个中介，在A和B的连接中间使用C作为中介，C就是一个代理，用于A，B直接连接的中间处理或是资源分配。</p>
+<h4 id="二、正向代理："><a href="#二、正向代理：" class="headerlink" title="二、正向代理："></a>二、正向代理：</h4><p>正向代理类似于一个跳板，A经过C跳板访问B的内容，例如国内客户端是无法直接访问外网内容，此时使用一个可以访问外网内容的跳板（正向代理服务器），实现外网内容访问。</p>
+<p>简单来说是A可以访问C，C可以访问B、与B实现数据交换，A无法直接访问B，通过C可以实现A访问B。</p>
+<p>正向代理的作用：</p>
+<ol>
+<li>客户端访问跳板</li>
+<li>服务器资源缓存，加速客户端访问</li>
+<li>访问授权，上网认证</li>
+<li>可以记录客户端访问日志</li>
+</ol>
+<h4 id="三、反向代理："><a href="#三、反向代理：" class="headerlink" title="三、反向代理："></a>三、反向代理：</h4><p>反向代理（Reverse Proxy）实际运行方式是以反向代理服务器来接受Internet上的连接请求，然后将代理的请求统一转发给内部网络上的服务器，服务器将请求的资源返回给Internet上对应发送连接请求的客户端。</p>
+<p>反向代理的作用：</p>
+<ol>
+<li>反向代理服务器作为公网访问地址，web服务器置于内网，确保内网、服务器的安全。</li>
+<li>负载均衡。</li>
+</ol>
+<h3 id="图解："><a href="#图解：" class="headerlink" title="图解："></a>图解：</h3><h4 id="正向代理："><a href="#正向代理：" class="headerlink" title="正向代理："></a>正向代理：</h4><p><img src="/2021/05/16/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86.png"></p>
+<h4 id="反向代理："><a href="#反向代理：" class="headerlink" title="反向代理："></a>反向代理：</h4><p><img src="/2021/05/16/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86.png"></p>
+<h4 id="网络大神总结-1-："><a href="#网络大神总结-1-：" class="headerlink" title="网络大神总结:+1:："></a>网络大神总结:+1:：</h4><p>正向代理：买票的黄牛</p>
+<p>反向代理：租房的代理</p>
+]]></content>
+      <categories>
+        <category>服务器</category>
+      </categories>
+      <tags>
+        <tag>服务器</tag>
       </tags>
   </entry>
 </search>
