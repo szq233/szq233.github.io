@@ -151,4 +151,53 @@
         <tag>服务器</tag>
       </tags>
   </entry>
+  <entry>
+    <title>js中回调函数的概念</title>
+    <url>/2021/05/25/js%E4%B8%AD%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
+    <content><![CDATA[<p><em>概要：Js中回调函数的概念</em></p>
+<span id="more"></span>
+<h2 id="个人理解：">个人理解：</h2>
+<h3 id="回调函数的定义：">回调函数的定义：</h3>
+<p>将一个函数作为参数的形式传入另一个函数中，那么这个函数就是回调函数，另一个函数可以决定在何时何处调用这个传入的回调函数。</p>
+<p>比如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//不传参示例</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//函数foo，callback是接收回调函数的形参，不一定命名为callback</span></span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&quot;a&quot;</span>);<span class="comment">//打印a</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;b&quot;</span>);<span class="comment">//打印b</span></span><br><span class="line">    callback();<span class="comment">//执行回调函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&quot;c&quot;</span>);<span class="comment">//打印c</span></span><br><span class="line">&#125;</span><br><span class="line">foo(f);<span class="comment">//执行foo函数，将f函数作为参数传入，f函数就是回调函数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//传参示例</span></span><br><span class="line"><span class="keyword">var</span> param1 = <span class="string">&quot;a&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">param,callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//param是函数foo接收param1参数的形参</span></span><br><span class="line">    <span class="comment">//函数foo，callback是接收回调函数的形参，不一定命名为callback</span></span><br><span class="line">    <span class="keyword">let</span> param2 = <span class="string">&quot;c&quot;</span></span><br><span class="line">	<span class="built_in">console</span>.log(param);<span class="comment">//打印param1</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;b&quot;</span>);<span class="comment">//打印b</span></span><br><span class="line">    callback(param2);<span class="comment">//执行回调函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">param</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//param为接收param2参数的形参</span></span><br><span class="line">	<span class="built_in">console</span>.log(param)<span class="comment">//打印param2</span></span><br><span class="line">&#125;</span><br><span class="line">foo(param1,f);<span class="comment">//执行foo函数，将param1传入，将f函数作为参数传入，f函数就是回调函数</span></span><br></pre></td></tr></table></figure>
+<h3 id="javascript中回调函数的作用：">javascript中回调函数的作用：</h3>
+<p>1、代码执行顺序逻辑更加清晰</p>
+<p>2、解决异步编程问题，使异步执行操作的执行顺序及先后变得可以控制。异步执行操作有：定时器、建立网络连接、读取网络流数据、向文件写入数据、Ajax提交、请求数据库服务，等等。</p>
+<p>目前，promise和async、await是解决异步编程的更优方案</p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>js中闭包的概念</title>
+    <url>/2021/05/25/js%E4%B8%AD%E9%97%AD%E5%8C%85%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
+    <content><![CDATA[<p><em>概要：Js中闭包的概念</em></p>
+<span id="more"></span>
+<h2 id="个人理解：">个人理解：</h2>
+<h3 id="js中闭包的定义💬：">js中闭包的定义💬：</h3>
+<p>一个函数及其对外部某几个参数的引用，形成的一个整体，可以称之为闭包。</p>
+<p>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">()(<span class="keyword">var</span> a = <span class="number">1</span>, b=<span class="number">2</span>;</span><br><span class="line">   <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> a+b;</span><br><span class="line">    &#125;)</span><br><span class="line"><span class="comment">//明显函数foo引用了foo函数外部的两个变量，这个函数和其引用的变量（环境）形成一个整体</span></span><br><span class="line"><span class="comment">//这样一个整体可以称之为闭包</span></span><br></pre></td></tr></table></figure>
+<p>我之前在学习闭包的时候所参照的一些返回函数和内嵌函数的例子，那么这里也简单做个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">&quot;全局变量&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a = <span class="string">&quot;局部变量&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">foo2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(a);</span><br><span class="line">	&#125; </span><br><span class="line">    <span class="keyword">return</span> foo2();</span><br><span class="line">&#125;</span><br><span class="line">foo1();<span class="comment">//打印“局部变量”</span></span><br><span class="line"><span class="comment">//foo2函数和局部变量a参数形成了闭包</span></span><br><span class="line"><span class="comment">//foo1函数实际执行return的foo2函数，foo2与局部变量a形成闭包，所以打印的是局部变量而不是全局变量</span></span><br></pre></td></tr></table></figure>
+<h3 id="那么为什么要这样使用闭包呢❓？">那么为什么要这样使用闭包呢❓？</h3>
+<p>原因是避免全局变量的影响。在es6的let、const新关键字出现之前，javascript只有函数作用域的概念而没有块作用域的概念。使用局部变量则需要函数内部定义，而如何访问到函数内部定义的局部变量，这就是闭包的作用。</p>
+<h3 id="闭包的作用😎：">闭包的作用😎：</h3>
+<p>1、通过闭包可以访问局部变量</p>
+<p>2、可以是局部变量驻留内存中，避免使用全局变量</p>
+<h3 id="闭包的缺陷-😐-：">闭包的缺陷**😐**：</h3>
+<p>由于闭包里作用域返回的局部变量资源不会被立刻销毁回收,所以可能会<strong>占用更多的内存</strong>;所以过度使用闭包会导致性能下降;</p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
 </search>
