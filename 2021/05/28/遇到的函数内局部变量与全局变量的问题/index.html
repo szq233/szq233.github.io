@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-smile.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-smile.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"szq233.github.io","root":"/","images":"/images","scheme":"Pisces","version":"8.3.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeIn","post_body":"fadeIn","coll_header":"fadeIn","sidebar":"pulse"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="概要：最近在网络上偶然看到的局部与全局变量的问题，发现自己也有点理解困难，便尝试分析下…">
+<meta property="og:type" content="article">
+<meta property="og:title" content="遇到的函数内局部变量与全局变量的问题">
+<meta property="og:url" content="https://szq233.github.io/2021/05/28/%E9%81%87%E5%88%B0%E7%9A%84%E5%87%BD%E6%95%B0%E5%86%85%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E4%B8%8E%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="Szq233&#39;s Blog">
+<meta property="og:description" content="概要：最近在网络上偶然看到的局部与全局变量的问题，发现自己也有点理解困难，便尝试分析下…">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-05-28T13:06:50.000Z">
+<meta property="article:modified_time" content="2021-05-28T14:22:12.919Z">
+<meta property="article:author" content="Szq233">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://szq233.github.io/2021/05/28/%E9%81%87%E5%88%B0%E7%9A%84%E5%87%BD%E6%95%B0%E5%86%85%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E4%B8%8E%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>遇到的函数内局部变量与全局变量的问题 | Szq233's Blog</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Szq233's Blog" type="application/atom+xml">
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Szq233's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/index" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8D%80%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">🍀问题：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8D%80%E5%88%86%E6%9E%90%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">🍀分析：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E5%85%88%E6%B3%A8%E9%87%8A%E9%83%A8%E5%88%86%E4%BB%A3%E7%A0%81%EF%BC%8C%E7%A1%AE%E8%AE%A4%E5%90%84%E5%8F%98%E9%87%8F%E7%9A%84%E4%BD%9C%E7%94%A8%E8%8C%83%E5%9B%B4"><span class="nav-number">2.1.</span> <span class="nav-text">1、先注释部分代码，确认各变量的作用范围</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E5%8F%96%E6%B6%88%E9%83%A8%E5%88%86%E6%B3%A8%E9%87%8A"><span class="nav-number">2.2.</span> <span class="nav-text">2、取消部分注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E5%8F%96%E6%B6%88%E5%85%A8%E9%83%A8%E6%B3%A8%E9%87%8A%EF%BC%8C%E7%BB%93%E6%9E%9C%E5%88%86%E6%9E%90"><span class="nav-number">2.3.</span> <span class="nav-text">3、取消全部注释，结果分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4%E3%80%81%E5%A2%9E%E5%8A%A0%E9%83%A8%E5%88%86%E4%BB%A3%E7%A0%81%E4%BB%A5%E9%AA%8C%E8%AF%81%E5%88%86%E6%9E%90"><span class="nav-number">2.4.</span> <span class="nav-text">4、增加部分代码以验证分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8D%80%E5%88%86%E6%9E%90%E7%BB%93%E6%9D%9F"><span class="nav-number">3.</span> <span class="nav-text">🍀分析结束</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Szq233"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Szq233</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/szq233" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;szq233" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://szq233.github.io/atom.xml" title="SSR订阅 → https:&#x2F;&#x2F;szq233.github.io&#x2F;atom.xml"><i class="fa fa-rss fa-fw"></i>SSR订阅</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://szq233.github.io/2021/05/28/%E9%81%87%E5%88%B0%E7%9A%84%E5%87%BD%E6%95%B0%E5%86%85%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E4%B8%8E%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Szq233">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Szq233's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          遇到的函数内局部变量与全局变量的问题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-05-28 21:06:50 / 修改时间：22:22:12" itemprop="dateCreated datePublished" datetime="2021-05-28T21:06:50+08:00">2021-05-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><em>概要：最近在网络上偶然看到的局部与全局变量的问题，发现自己也有点理解困难，便尝试分析下…</em></p>
+<span id="more"></span>
+<h3 id="🍀问题：">🍀问题：</h3>
+<p>✋如下代码所示：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> foo = &#123;<span class="attr">n</span>:<span class="number">1</span>&#125;</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">foo</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> foo;</span><br><span class="line">    <span class="built_in">console</span>.log(foo.n);</span><br><span class="line">    foo.n = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">var</span> foo = &#123;<span class="attr">n</span>:<span class="number">2</span>&#125;;</span><br><span class="line">    <span class="built_in">console</span>.log(foo.n);</span><br><span class="line">&#125;)(foo)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(foo.n);</span><br></pre></td></tr></table></figure>
+<p>这个函数最终的结果是报错，因为立即执行函数括号前没有分号分隔赋值语句的”}“，导致语法错误。那么，如果确实有分号，语法正确的情况下，这些代码执行后会输出什么呢？往下修改演示代码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> foo = &#123;<span class="attr">n</span>:<span class="number">1</span>&#125;;</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">foo</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> foo;</span><br><span class="line">    <span class="built_in">console</span>.log(foo.n);<span class="comment">//1</span></span><br><span class="line">    foo.n = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">var</span> foo = &#123;<span class="attr">n</span>:<span class="number">2</span>&#125;;</span><br><span class="line">    <span class="built_in">console</span>.log(foo.n);<span class="comment">//2</span></span><br><span class="line">&#125;)(foo)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(foo.n);<span class="comment">//3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//输出结果:</span></span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">//2</span></span><br><span class="line"><span class="comment">//3</span></span><br></pre></td></tr></table></figure>
+<p>第一次看到结果确实蛮奇怪的，那么接下来分析下造成该输出结果的原因。</p>
+<h3 id="🍀分析：">🍀分析：</h3>
+<h4 id="1、先注释部分代码，确认各变量的作用范围">1、先注释部分代码，确认各变量的作用范围</h4>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> foo = &#123;<span class="attr">n</span>:<span class="number">1</span>&#125;;</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">foo</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// var foo;</span></span><br><span class="line">    <span class="built_in">console</span>.log(foo.n);<span class="comment">//1</span></span><br><span class="line">    <span class="comment">// foo.n = 3;</span></span><br><span class="line">    <span class="comment">// var foo = &#123;n:2&#125;;</span></span><br><span class="line">    <span class="comment">// console.log(foo.n);</span></span><br><span class="line">&#125;)(foo)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(foo.n);<span class="comment">//1</span></span><br><span class="line"><span class="comment">//输出结果：</span></span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">//1</span></span><br></pre></td></tr></table></figure>
+<p>这里可以看到立即执行函数在第8行代码接收了全局变量<code>foo = &#123;n:1&#125;</code>，可以确定第一个输出的<code>foo.n</code>确实为1。</p>
+<h4 id="2、取消部分注释">2、取消部分注释</h4>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> foo = &#123;<span class="attr">n</span>:<span class="number">1</span>&#125;;</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">foo</span>)</span>&#123;</span><br><span class="line">    <span class="comment">// var foo;</span></span><br><span class="line">    <span class="built_in">console</span>.log(foo.n);<span class="comment">//1</span></span><br><span class="line">    foo.n = <span class="number">3</span>;</span><br><span class="line">    <span class="comment">// var foo = &#123;n:2&#125;;</span></span><br><span class="line">    <span class="built_in">console</span>.log(foo.n);<span class="comment">//3</span></span><br><span class="line">&#125;)(foo)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(foo.n);<span class="comment">//3</span></span><br><span class="line"><span class="comment">//输出结果：</span></span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">//3</span></span><br><span class="line"><span class="comment">//3</span></span><br></pre></td></tr></table></figure>
+<p>这里可以看到在5行的<code>foo.n=3;</code>后，7行和10行输出结果都为3，说明<code>foo.n=3;</code>改变了全局变量</p>
+<p>同时7行代码也是访问到了全局变量。注意：由于在取消3行的<code>//var foo;</code>注释后，输出结果不变，说明<code>var foo;</code>无法创建绑定为函数内部的局部变量的foo变量。</p>
+<h4 id="3、取消全部注释，结果分析">3、取消全部注释，结果分析</h4>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> foo = &#123;<span class="attr">n</span>:<span class="number">1</span>&#125;;</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">foo</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> foo;</span><br><span class="line">    <span class="built_in">console</span>.log(foo.n);<span class="comment">//1</span></span><br><span class="line">    foo.n = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">var</span> foo = &#123;<span class="attr">n</span>:<span class="number">2</span>&#125;;</span><br><span class="line">    <span class="built_in">console</span>.log(foo.n);<span class="comment">//2</span></span><br><span class="line">&#125;)(foo)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(foo.n);<span class="comment">//3</span></span><br><span class="line"><span class="comment">//输出结果：</span></span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">//2</span></span><br><span class="line"><span class="comment">//3</span></span><br></pre></td></tr></table></figure>
+<p>这里可以看到，7行代码输出结果改变了，说明<code>var foo = &#123;n:2&#125;;</code>创建了绑定为函数内局部变量的foo变量，同时赋值该局部变量不影响全局变量，所以第10行代码输出的依旧是在函数未创建局部变量foo前第5行代码修改的全局变量的值：3。</p>
+<p>4行代码输出1是立即执行函数<code>()(foo)</code>接收的全局变量<code>foo = &#123;n:1&#125;</code>；7行代码输出的是6行代码声明并赋值的局部变量<code>foo = &#123;n:2&#125;</code>；10行输出的是函数内第5行代码<code>foo.n =3;</code>修改后的全局变量。</p>
+<h4 id="4、增加部分代码以验证分析">4、增加部分代码以验证分析</h4>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> foo = &#123;<span class="attr">n</span>:<span class="number">1</span>&#125;;</span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">foo</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> foo;</span><br><span class="line">    <span class="built_in">console</span>.log(foo.n);<span class="comment">//1</span></span><br><span class="line">    foo.n = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">var</span> foo = &#123;<span class="attr">n</span>:<span class="number">2</span>&#125;;</span><br><span class="line">    <span class="built_in">console</span>.log(foo.n);<span class="comment">//2</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*增加的代码*/</span></span><br><span class="line">    foo.n = <span class="number">4</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(foo.n);<span class="comment">//4</span></span><br><span class="line">&#125;)(foo)</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(foo.n);<span class="comment">//1</span></span><br><span class="line"><span class="comment">//输出结果：</span></span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">//2</span></span><br><span class="line"><span class="comment">//4</span></span><br><span class="line"><span class="comment">//1</span></span><br></pre></td></tr></table></figure>
+<p>这里输出的结果可以看出：确实，在创建了函数作用域内局部变量foo后，<code>foo.n = 4;</code>修改的是局部变量，不影响全局变量。</p>
+<p>注意：此时可以通过传入window对象来修改全局变量。</p>
+<h3 id="🍀分析结束">🍀分析结束</h3>
+<p>在存在传入局部作用域的全局变量的情况下，仅在声明同名变量的情况下，无法覆盖传入的全局变量，需要为其赋值才能以局部变量的形式覆盖传入的全局变量。</p>
+<p>😉👌</p>
+<p>感觉有点小问题。。。</p>
+<p>😳💦</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"><i class="fa fa-tag"></i> JavaScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/05/25/js%E4%B8%AD%E9%97%AD%E5%8C%85%E7%9A%84%E6%A6%82%E5%BF%B5/" rel="prev" title="js中闭包的概念">
+                  <i class="fa fa-chevron-left"></i> js中闭包的概念
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MzM3Ny8yOTg1MQ=="></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-mars"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Szq233</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '32px',
+  right: '16px',
+  left: 'unset',
+  time: '0.5s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+
+<script>
+NexT.utils.loadComments('#lv-container', () => {
+  window.livereOptions = {
+    refer: "2021/05/28/遇到的函数内局部变量与全局变量的问题/"
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>
