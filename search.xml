@@ -263,7 +263,7 @@
 <p>可以说明，剩余参数接收的是全部参数中未与形参对应传入的剩下的参数。</p>
 <p>值得注意的是：</p>
 <p>1、三点语法只能放在所有形参的最后，不然会错，因为它已经包揽了未与它之前形参对应的剩余参数，再整个形参来接收看看有没有剩下的参数岂不是看不起它了。😹</p>
-<p>2、使用剩余参数后，，函数的length属性会发生改变。</p>
+<p>2、使用剩余参数后，函数的length属性会发生改变。</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a, b, ...rest</span>) </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">foo.length; <span class="comment">//2</span></span><br></pre></td></tr></table></figure>
 <p>说明，length不包含rest。</p>
 <p>3、不能和arguments一起使用。</p>
