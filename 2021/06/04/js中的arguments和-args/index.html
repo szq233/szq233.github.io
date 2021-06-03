@@ -22,21 +22,21 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"szq233.github.io","root":"/","images":"/images","scheme":"Pisces","version":"8.3.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeIn","post_body":"fadeIn","coll_header":"fadeIn","sidebar":"pulse"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}};
   </script>
-<meta name="description" content="测试测试测试测试">
+<meta name="description" content="概要：学习express中间件原理时候遇到的arguments对象和…args形参，从一脸懵逼到简单认识…">
 <meta property="og:type" content="article">
-<meta property="og:title" content="newpagename">
-<meta property="og:url" content="https://szq233.github.io/2021/04/27/newpagename/index.html">
+<meta property="og:title" content="js中的arguments和...args">
+<meta property="og:url" content="https://szq233.github.io/2021/06/04/js%E4%B8%AD%E7%9A%84arguments%E5%92%8C-args/index.html">
 <meta property="og:site_name" content="Szq233&#39;s Blog">
-<meta property="og:description" content="测试测试测试测试">
+<meta property="og:description" content="概要：学习express中间件原理时候遇到的arguments对象和…args形参，从一脸懵逼到简单认识…">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-04-27T10:57:24.000Z">
-<meta property="article:modified_time" content="2021-04-28T04:50:11.867Z">
+<meta property="article:published_time" content="2021-06-03T21:20:54.000Z">
+<meta property="article:modified_time" content="2021-06-03T22:31:01.422Z">
 <meta property="article:author" content="Szq233">
-<meta property="article:tag" content="测试">
+<meta property="article:tag" content="JavaScript">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://szq233.github.io/2021/04/27/newpagename/">
+<link rel="canonical" href="https://szq233.github.io/2021/06/04/js%E4%B8%AD%E7%9A%84arguments%E5%92%8C-args/">
 
 
 <script class="page-configurations">
@@ -48,7 +48,7 @@
     lang   : 'zh-CN'
   };
 </script>
-<title>newpagename | Szq233's Blog</title>
+<title>js中的arguments和...args | Szq233's Blog</title>
   
 
 
@@ -174,7 +174,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -187,6 +187,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E8%A8%80%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">引言：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%86%E8%A7%A3%E8%BF%87%E7%A8%8B1%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">了解过程1：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%86%E8%A7%A3%E8%BF%87%E7%A8%8B2%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">了解过程2：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%86%E8%A7%A3%E8%BF%87%E7%A8%8B3%EF%BC%9A"><span class="nav-number">4.</span> <span class="nav-text">了解过程3：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9D%9F%E8%AF%AD%EF%BC%9A"><span class="nav-number">5.</span> <span class="nav-text">结束语：</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -263,7 +264,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://szq233.github.io/2021/04/27/newpagename/">
+    <link itemprop="mainEntityOfPage" href="https://szq233.github.io/2021/06/04/js%E4%B8%AD%E7%9A%84arguments%E5%92%8C-args/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -276,7 +277,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          newpagename
+          js中的arguments和...args
         </h1>
 
         <div class="post-meta-container">
@@ -286,16 +287,19 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2021-04-27 18:57:24" itemprop="dateCreated datePublished" datetime="2021-04-27T18:57:24+08:00">2021-04-27</time>
+      <time title="创建时间：2021-06-04 05:20:54 / 修改时间：06:31:01" itemprop="dateCreated datePublished" datetime="2021-06-04T05:20:54+08:00">2021-06-04</time>
     </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-04-28 12:50:11" itemprop="dateModified" datetime="2021-04-28T12:50:11+08:00">2021-04-28</time>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
       </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+        </span>
+    </span>
 
   
 </div>
@@ -307,7 +311,36 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p>测试测试测试测试</p>
+        <p><em>概要：学习express中间件原理时候遇到的arguments对象和…args形参，从一脸懵逼到简单认识…</em></p>
+<span id="more"></span>
+<h2 id="引言：">引言：</h2>
+<p>最近在学习express框架的中间件原理时候遇到了一系列问题，让我总算是明白了啥叫基础不牢，地动山摇😭。首先是学习视频中使用的以下传参和解析方式。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> slice = <span class="built_in">Array</span>.prototype.slice；</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">const</span> info = &#123;&#125;;</span><br><span class="line">    info.stack = slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>刚看到时我是真的满脸问号，slice是从Array原型上提取的方法，这arguments是啥，找半天愣是没找着哪里传入的参数。</p>
+<h2 id="了解过程1：">了解过程1：</h2>
+<p>再搜遍百度后，发现原来这个参数是function自带的属性，是一个类数组对象，保存的是当前函数传入的参数，是一个函数本身就有的对象属性。那么问题又来了，一个对象怎么使用了数组的slice方法，再一遍搜索百度之后（学习就是面向百度的过程😆），发现，这个类数组对象有.length属性。可以使用数组的slice方法进行数组切片。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">max</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">arguments</span>.length);</span><br><span class="line">&#125;</span><br><span class="line">max(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);<span class="comment">//3</span></span><br></pre></td></tr></table></figure>
+<p>但是，由于该arguments对象继承于Object.prototype，原生没有slice方法，所以需要从数组原型链上提取slice方法来使用，所以其实第一个代码示例中的<code>slice.call(arguments, 1);</code>就是将arguments对象转换成数组，并切片返回第二个元素开始的所有元素的数组。</p>
+<h2 id="了解过程2：">了解过程2：</h2>
+<p>了解了这些，我回过头来看代码，清晰了很多，但是又发现了一个与arguments很相似的参数，<code>(...args)</code>。我以前学过的知识的印象里，这东西叫三点语法，作用是可以接收未知数量的参数。由于这个语法是真的和arguments有关系，我在百度arguments的同时了解到了<code>...args</code>的全貌。</p>
+<p>首先，这个语法是ES6引入的新语法，全名叫做rest parameters(剩余参数)，三个点后面是自定义的参数名，它接收后得到的是一个真正的数组，也确实可以使用来传入未知数量的参数，如下示例。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">...rest</span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(rest);</span><br><span class="line">&#125;</span><br><span class="line">foo(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);<span class="comment">//[1,2,3,4]</span></span><br></pre></td></tr></table></figure>
+<p>这样的特性使得它可以替代arguments来实现一些功能。👍</p>
+<p>但是，它既然叫做剩余参数，那么一定有其”剩余“的特性，如下示例代码可以说明。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//代码1</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo2</span>(<span class="params">a, ...rest</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">    <span class="built_in">console</span>.log(rest);</span><br><span class="line">&#125;</span><br><span class="line">foo2(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">//[2, 3, 4]</span></span><br><span class="line"><span class="comment">/////////////////////////////////////////</span></span><br><span class="line"><span class="comment">//代码2</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo3</span>(<span class="params">a, b, ...rest</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">    <span class="built_in">console</span>.log(b);</span><br><span class="line">    <span class="built_in">console</span>.log(rest);</span><br><span class="line">&#125;</span><br><span class="line">foo2(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">//2</span></span><br><span class="line"><span class="comment">//[3, 4]</span></span><br><span class="line"><span class="comment">/////////////////////////////////////////</span></span><br></pre></td></tr></table></figure>
+<p>可以说明，剩余参数接收的是全部参数中未与形参对应传入的剩下的参数。</p>
+<p>值得注意的是：</p>
+<p>1、三点语法只能放在所有形参的最后，不然会错，因为它已经包揽了未与它之前形参对应的剩余参数，再整个形参来接收看看有没有剩下的参数岂不是看不起它了。😹</p>
+<p>2、使用剩余参数后，，函数的length属性会发生改变。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a, b, ...rest</span>) </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">foo.length; <span class="comment">//2</span></span><br></pre></td></tr></table></figure>
+<p>说明，length不包含rest。</p>
+<p>3、不能和arguments一起使用。</p>
+<h2 id="了解过程3：">了解过程3：</h2>
+<p>在演示所学的代码的时候，我发现三点语法还可以当做运算符来使用，实现如下的结果。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">max</span>(<span class="params">...args</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(...args);</span><br><span class="line">&#125;</span><br><span class="line">max(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);<span class="comment">//1 2 3</span></span><br></pre></td></tr></table></figure>
+<p>没错，对数组进行了解构，将[1, 2, 3]解构成了1,2,3，它可以将可遍历的数组，对象甚至是字符串进行解构，再进行赋值，就可以实现数组复制，对象复制，字符串转换数组等功能。</p>
+<h2 id="结束语：">结束语：</h2>
+<p>JavaScript基础知识内容太多了！😤😭</p>
 
     </div>
 
@@ -317,21 +350,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 测试</a>
+              <a href="/tags/JavaScript/" rel="tag"><i class="fa fa-tag"></i> JavaScript</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2021/04/27/hello-world/" rel="prev" title="Hello World">
-                  <i class="fa fa-chevron-left"></i> Hello World
+                <a href="/2021/05/28/%E9%81%87%E5%88%B0%E7%9A%84%E5%87%BD%E6%95%B0%E5%86%85%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E4%B8%8E%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E9%97%AE%E9%A2%98/" rel="prev" title="遇到的函数内局部变量与全局变量的问题">
+                  <i class="fa fa-chevron-left"></i> 遇到的函数内局部变量与全局变量的问题
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2021/04/28/newpagename2/" rel="next" title="newpagename2">
-                  newpagename2 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -428,7 +458,7 @@ darkmode.showWidget();
 <script>
 NexT.utils.loadComments('#lv-container', () => {
   window.livereOptions = {
-    refer: "2021/04/27/newpagename/"
+    refer: "2021/06/04/js中的arguments和-args/"
   };
   (function(d, s) {
     var j, e = d.getElementsByTagName(s)[0];
