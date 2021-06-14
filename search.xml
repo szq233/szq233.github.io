@@ -281,4 +281,19 @@
         <tag>JavaScript</tag>
       </tags>
   </entry>
+  <entry>
+    <title>webpack入坑</title>
+    <url>/2021/06/14/webpack%E5%85%A5%E5%9D%91/</url>
+    <content><![CDATA[<h2 id="结论：">结论：</h2>
+<p>webpack不同版本的options不同以及其使用的各个loader和plugin之间的版本差异导致的各种兼容问题真的是巨坑！！！😭</p>
+<h2 id="解决办法：">解决办法：</h2>
+<p>老老实实踩坑。💩</p>
+]]></content>
+      <categories>
+        <category>webpack</category>
+      </categories>
+      <tags>
+        <tag>webpack</tag>
+      </tags>
+  </entry>
 </search>

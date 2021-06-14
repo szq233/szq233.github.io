@@ -6,7 +6,7 @@
   <link href="https://szq233.github.io/atom.xml" rel="self"/>
   
   <link href="https://szq233.github.io/"/>
-  <updated>2021-06-03T22:33:30.230Z</updated>
+  <updated>2021-06-14T06:49:50.272Z</updated>
   <id>https://szq233.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>webpack入坑</title>
+    <link href="https://szq233.github.io/2021/06/14/webpack%E5%85%A5%E5%9D%91/"/>
+    <id>https://szq233.github.io/2021/06/14/webpack%E5%85%A5%E5%9D%91/</id>
+    <published>2021-06-14T06:44:36.000Z</published>
+    <updated>2021-06-14T06:49:50.272Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="结论：">结论：</h2><p>webpack不同版本的options不同以及其使用的各个loader和plugin之间的版本差异导致的各种兼容问题真的是巨坑！！！😭</p><h2 id="解决办法：">解决办法：</h2><p>老老实实踩坑。💩</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;结论：&quot;&gt;结论：&lt;/h2&gt;
+&lt;p&gt;webpack不同版本的options不同以及其使用的各个loader和plugin之间的版本差异导致的各种兼容问题真的是巨坑！！！😭&lt;/p&gt;
+&lt;h2 id=&quot;解决办法：&quot;&gt;解决办法：&lt;/h2&gt;
+&lt;p&gt;老老实实踩坑。💩&lt;/p&gt;</summary>
+      
+    
+    
+    
+    <category term="webpack" scheme="https://szq233.github.io/categories/webpack/"/>
+    
+    
+    <category term="webpack" scheme="https://szq233.github.io/tags/webpack/"/>
+    
+  </entry>
   
   <entry>
     <title>js中的arguments和...args</title>
