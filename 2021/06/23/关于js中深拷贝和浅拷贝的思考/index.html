@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-smile.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-smile.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"szq233.github.io","root":"/","images":"/images","scheme":"Pisces","version":"8.3.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeIn","post_body":"fadeIn","coll_header":"fadeIn","sidebar":"pulse"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}};
+  </script>
+<meta name="description" content="概要：对Js数据的深拷贝和浅拷贝做一个总结，加深记忆">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于js中深拷贝和浅拷贝思考">
+<meta property="og:url" content="https://szq233.github.io/2021/06/23/%E5%85%B3%E4%BA%8Ejs%E4%B8%AD%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E7%9A%84%E6%80%9D%E8%80%83/index.html">
+<meta property="og:site_name" content="Szq233&#39;s Blog">
+<meta property="og:description" content="概要：对Js数据的深拷贝和浅拷贝做一个总结，加深记忆">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-06-23T14:47:12.000Z">
+<meta property="article:modified_time" content="2021-06-23T17:08:55.536Z">
+<meta property="article:author" content="Szq233">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Js数据">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://szq233.github.io/2021/06/23/%E5%85%B3%E4%BA%8Ejs%E4%B8%AD%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E7%9A%84%E6%80%9D%E8%80%83/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<title>关于js中深拷贝和浅拷贝思考 | Szq233's Blog</title>
+  
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Szq233's Blog" type="application/atom+xml">
+<style>.darkmode--activated{--body-bg-color:#282828;--content-bg-color:#333;--card-bg-color:#555;--text-color:#ccc;--blockquote-color:#bbb;--link-color:#ccc;--link-hover-color:#eee;--brand-color:#ddd;--brand-hover-color:#ddd;--table-row-odd-bg-color:#282828;--table-row-hover-bg-color:#363636;--menu-item-bg-color:#555;--btn-default-bg:#222;--btn-default-color:#ccc;--btn-default-border-color:#555;--btn-default-hover-bg:#666;--btn-default-hover-color:#ccc;--btn-default-hover-border-color:#666;--highlight-background:#282b2e;--highlight-foreground:#a9b7c6;--highlight-gutter-background:#34393d;--highlight-gutter-foreground:#9ca9b6}.darkmode--activated img{opacity:.75}.darkmode--activated img:hover{opacity:.9}.darkmode--activated code{color:#69dbdc;background:0 0}button.darkmode-toggle{z-index:9999}</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Szq233's Blog</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/index" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Js%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">Js数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Js%E6%95%B0%E6%8D%AE%E6%B5%85%E6%8B%B7%E8%B4%9D"><span class="nav-number">2.</span> <span class="nav-text">Js数据浅拷贝</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%B5%85%E6%8B%B7%E8%B4%9D%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">2.0.1.</span> <span class="nav-text">实现浅拷贝的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1%E3%80%81%E5%8F%98%E9%87%8F%E8%B5%8B%E5%80%BC"><span class="nav-number">2.0.1.1.</span> <span class="nav-text">1、变量赋值</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Js%E6%95%B0%E6%8D%AE%E6%B7%B1%E6%8B%B7%E8%B4%9D"><span class="nav-number">3.</span> <span class="nav-text">Js数据深拷贝</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%B7%B1%E6%8B%B7%E8%B4%9D%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">3.0.1.</span> <span class="nav-text">实现深拷贝的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1%E3%80%81%E9%80%92%E5%BD%92"><span class="nav-number">3.0.1.1.</span> <span class="nav-text">1、递归</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2%E3%80%81%E4%BD%BF%E7%94%A8JSON-stringify%E5%92%8CJSON-parse"><span class="nav-number">3.0.1.2.</span> <span class="nav-text">2、使用JSON.stringify和JSON.parse</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Szq233"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Szq233</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/szq233" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;szq233" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://szq233.github.io/atom.xml" title="SSR订阅 → https:&#x2F;&#x2F;szq233.github.io&#x2F;atom.xml"><i class="fa fa-rss fa-fw"></i>SSR订阅</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://szq233.github.io/2021/06/23/%E5%85%B3%E4%BA%8Ejs%E4%B8%AD%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E7%9A%84%E6%80%9D%E8%80%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Szq233">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Szq233's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          关于js中深拷贝和浅拷贝思考
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-06-23 22:47:12" itemprop="dateCreated datePublished" datetime="2021-06-23T22:47:12+08:00">2021-06-23</time>
+    </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-06-24 01:08:55" itemprop="dateModified" datetime="2021-06-24T01:08:55+08:00">2021-06-24</time>
+      </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JavaScript/" itemprop="url" rel="index"><span itemprop="name">JavaScript</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><em>概要：对Js数据的深拷贝和浅拷贝做一个总结，加深记忆</em></p>
+<span id="more"></span>
+<h2 id="Js数据类型">Js数据类型</h2>
+<p>由基本数据类型和引用数据类型组成，简单数据类型包括（Number、String、Boolean、Undefined、Null）；引用数据类型包括（Object、Array、Function）。两者的数据结构和存储方式都有所不同。具体参考我写的另一篇博文（<a href="https://szq233.github.io/2021/04/29/js%E6%95%B0%E6%8D%AE%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/#more">Blog：js数据在内存中的存储方式-2021.04.29</a>）。</p>
+<p>由于不同的数据存储方式，Js引用数据类型拷贝具有深拷贝和浅拷贝的区别。</p>
+<h2 id="Js数据浅拷贝">Js数据浅拷贝</h2>
+<p>顾名思义，比较浅层面的拷贝。对于引用数据来说，一个变量保存了一个引用类型数据，那么该变量其实是保存了一个指向数据堆中该引用数据的一个引用地址（理解为“变量保存了一个指向数据堆中引用类型数据的指针”可能对一些小伙伴来说更好理解）。所以在浅层面变量保存的是引用地址（指针），浅拷贝就是拷贝引用地址（指针）。代码示例。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">	name: <span class="string">&#x27;测试对象&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//对象是一个引用类型数据，obj这个变量保存了指向&#123;name：‘测试对象’&#125;（方便理解这么写）这个对象的引用地址，这个引用地址是该数据在数据堆中位置，比如我拿二维坐标模拟，现在存的是（x=1米，y=2米）。</span></span><br><span class="line"><span class="keyword">const</span> obj2 = obj;</span><br><span class="line"><span class="comment">//实现浅拷贝</span></span><br><span class="line"><span class="comment">//obj2将obj保存的（x=1米，y=2米）这么一个坐标位置复制过来，赋值到自己身上。</span></span><br><span class="line"><span class="comment">//那么obj2对应的数据跟上面obj一样，是同一个&#123;name: &#x27;测试对象&#x27;&#125;,因为坐标是一样的嘛。</span></span><br></pre></td></tr></table></figure>
+<h4 id="实现浅拷贝的方法">实现浅拷贝的方法</h4>
+<h5 id="1、变量赋值">1、变量赋值</h5>
+<h2 id="Js数据深拷贝">Js数据深拷贝</h2>
+<p>顾名思义，实现深层次的拷贝，深挖到数据堆中，将对应数据堆中的数据进行拷贝一份而不是拷贝引用地址。</p>
+<p>如下代码示例。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//为方便解释，暂时对象中只包含基本类型数据的属性。</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">	name: <span class="string">&#x27;测试对象&#x27;</span>，</span><br><span class="line">    age: <span class="number">12</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj1 = &#123;&#125; <span class="comment">//初始化一个空对象，拿来拷贝obj</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">	obj1[key] = obj[key]</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//以下是测试</span></span><br><span class="line"><span class="comment">//使用node命令运行js文件</span></span><br><span class="line"><span class="built_in">console</span>.log(obj)<span class="comment">//&#123; name: &#x27;测试对象&#x27;, age: 12 &#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(obj1)<span class="comment">//&#123; name: &#x27;测试对象&#x27;, age: 12 &#125;</span></span><br><span class="line"><span class="comment">//两者内容一样，实现了拷贝</span></span><br><span class="line"><span class="built_in">console</span>.log(obj === obj1)<span class="comment">//false</span></span><br><span class="line"><span class="comment">//两者保存的不是同一个数据，实现了深拷贝</span></span><br></pre></td></tr></table></figure>
+<p>❗️但是在实际中对象属性不一定是基本类型数据，也有可能是引用类型数据，所以需要使用其他方法实现深拷贝。</p>
+<h4 id="实现深拷贝的方法">实现深拷贝的方法</h4>
+<h5 id="1、递归">1、递归</h5>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepClone</span>(<span class="params">source</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> newObj = source.constructor === <span class="built_in">Array</span> ? [] : &#123;&#125;;<span class="comment">//判断source（被拷贝目标）是数组还是对象</span></span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">in</span> source) &#123;</span><br><span class="line">    <span class="keyword">if</span>(source.hasOwnProperty(key)) &#123;</span><br><span class="line">      <span class="keyword">if</span>(source[key] &amp;&amp; <span class="keyword">typeof</span> source[key] === <span class="string">&#x27;object&#x27;</span>)&#123;</span><br><span class="line">        <span class="comment">//判断每一次遍历属性的值是否存在并且是对象，则递归</span></span><br><span class="line">        newObj[key] = source.constructor === <span class="built_in">Array</span> ? [] : &#123;&#125;;</span><br><span class="line">        newObj[key] = deepClone(source[key]);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        newObj[key] = source[key];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> newObj;<span class="comment">//返回拷贝处理后的对象，以用于递归，递归完成后该对象完成深拷贝</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//自定义一个含有许多引用类型数据属性的对象</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  name: <span class="string">&#x27;测试对象2&#x27;</span>,</span><br><span class="line">  list: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],</span><br><span class="line">  post: &#123;</span><br><span class="line">    title: <span class="string">&#x27;测试标题&#x27;</span>,</span><br><span class="line">    content: <span class="string">&#x27;测试内容&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  music: [</span><br><span class="line">    &#123;</span><br><span class="line">      mtitle: <span class="string">&#x27;晴天&#x27;</span>,</span><br><span class="line">      mauthor: <span class="string">&#x27;周杰伦&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      mtitle: <span class="string">&#x27;美人鱼&#x27;</span>,</span><br><span class="line">      mauthor: <span class="string">&#x27;林俊杰&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> obj1 = deepClone(obj);<span class="comment">//调用写好的拷贝方法，将obj拷贝给obj1</span></span><br><span class="line"><span class="comment">//以下是测试</span></span><br><span class="line"><span class="built_in">console</span>.log(obj);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  name: &#x27;测试对象2&#x27;,</span></span><br><span class="line"><span class="comment">  list: [ 1, 2, 3, 4, 5 ],</span></span><br><span class="line"><span class="comment">  post: &#123; title: &#x27;测试标题&#x27;, content: &#x27;测试内容&#x27; &#125;,</span></span><br><span class="line"><span class="comment">  music: [</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;晴天&#x27;, mauthor: &#x27;周杰伦&#x27; &#125;,</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;美人鱼&#x27;, mauthor: &#x27;林俊杰&#x27; &#125;</span></span><br><span class="line"><span class="comment">  ]</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">console</span>.log(obj1);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  name: &#x27;测试对象2&#x27;,</span></span><br><span class="line"><span class="comment">  list: [ 1, 2, 3, 4, 5 ],</span></span><br><span class="line"><span class="comment">  post: &#123; title: &#x27;测试标题&#x27;, content: &#x27;测试内容&#x27; &#125;,</span></span><br><span class="line"><span class="comment">  music: [</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;晴天&#x27;, mauthor: &#x27;周杰伦&#x27; &#125;,</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;美人鱼&#x27;, mauthor: &#x27;林俊杰&#x27; &#125;</span></span><br><span class="line"><span class="comment">  ]</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">//两者内容一样，实现了拷贝</span></span><br><span class="line"><span class="built_in">console</span>.log(obj === obj1);<span class="comment">//false</span></span><br><span class="line"><span class="comment">//两者不是引用的同一个对象，实现了深拷贝</span></span><br></pre></td></tr></table></figure>
+<h5 id="2、使用JSON-stringify和JSON-parse">2、使用JSON.stringify和JSON.parse</h5>
+<p>总所周知，json是一种字符串形式的数据，js中使用JSON方法将json数据在字符串与特殊类型数据之间转换，同样，总所周知，字符串在js中是基本数据类型String，拷贝基本类型数据，将在栈中开辟一个新空间并拷贝内容进其中。</p>
+<p>那么，就可以将一个引用类型数据转换为json字符串形式的数据，将这字符串先赋值给一个暂存变量，再将暂存变量中的json字符串转换为一个引用类型数据并赋值给一个新变量，就可以实现引用类型数据深拷贝。如下代码示例。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//自定义一个较为复杂的对象</span></span><br><span class="line"><span class="keyword">const</span> jsonObj = &#123;</span><br><span class="line">  name: <span class="string">&#x27;测试对象2&#x27;</span>,</span><br><span class="line">  list: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],</span><br><span class="line">  post: &#123;</span><br><span class="line">    title: <span class="string">&#x27;测试标题&#x27;</span>,</span><br><span class="line">    content: <span class="string">&#x27;测试内容&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  music: [</span><br><span class="line">    &#123;</span><br><span class="line">      mtitle: <span class="string">&#x27;晴天&#x27;</span>,</span><br><span class="line">      mauthor: <span class="string">&#x27;周杰伦&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      mtitle: <span class="string">&#x27;美人鱼&#x27;</span>,</span><br><span class="line">      mauthor: <span class="string">&#x27;林俊杰&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> jsonBuffer = <span class="built_in">JSON</span>.stringify(jsonObj);<span class="comment">//对象转换为json字符串，并赋值给一个暂时存储用的变量。</span></span><br><span class="line"><span class="keyword">const</span> jsonObj1 = <span class="built_in">JSON</span>.parse(jsonBuffer);<span class="comment">//将暂存变量中json字符串重新转换为对象，并赋值给一个新的变量。</span></span><br><span class="line">									<span class="comment">/*拷贝完成*/</span></span><br><span class="line"><span class="comment">//以下是测试</span></span><br><span class="line"><span class="built_in">console</span>.log(jsonObj);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  name: &#x27;测试对象2&#x27;,</span></span><br><span class="line"><span class="comment">  list: [ 1, 2, 3, 4, 5 ],</span></span><br><span class="line"><span class="comment">  post: &#123; title: &#x27;测试标题&#x27;, content: &#x27;测试内容&#x27; &#125;,</span></span><br><span class="line"><span class="comment">  music: [</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;晴天&#x27;, mauthor: &#x27;周杰伦&#x27; &#125;,</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;美人鱼&#x27;, mauthor: &#x27;林俊杰&#x27; &#125;</span></span><br><span class="line"><span class="comment">  ]</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">console</span>.log(jsonObj1);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  name: &#x27;测试对象2&#x27;,</span></span><br><span class="line"><span class="comment">  list: [ 1, 2, 3, 4, 5 ],</span></span><br><span class="line"><span class="comment">  post: &#123; title: &#x27;测试标题&#x27;, content: &#x27;测试内容&#x27; &#125;,</span></span><br><span class="line"><span class="comment">  music: [</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;晴天&#x27;, mauthor: &#x27;周杰伦&#x27; &#125;,</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;美人鱼&#x27;, mauthor: &#x27;林俊杰&#x27; &#125;</span></span><br><span class="line"><span class="comment">  ]</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">//两者内容一样，实现了拷贝</span></span><br><span class="line"><span class="built_in">console</span>.log(jsonObj === jsonObj1);</span><br><span class="line"><span class="comment">//两个变量引用的不是同一个对象，实现了深拷贝。</span></span><br></pre></td></tr></table></figure>
+<h2 id="总结">总结</h2>
+<p>写的有点多，一直敲的没停，手疼。😹</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"><i class="fa fa-tag"></i> JavaScript</a>
+              <a href="/tags/Js%E6%95%B0%E6%8D%AE/" rel="tag"><i class="fa fa-tag"></i> Js数据</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/" rel="prev" title="最近做vue音乐小项目遇到的坑">
+                  <i class="fa fa-chevron-left"></i> 最近做vue音乐小项目遇到的坑
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MzM3Ny8yOTg1MQ=="></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-mars"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Szq233</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+
+<script>
+var options = {
+  bottom: '32px',
+  right: '16px',
+  left: 'unset',
+  time: '0.5s',
+  mixColor: 'transparent',
+  backgroundColor: 'transparent',
+  buttonColorDark: '#100f2c',
+  buttonColorLight: '#fff',
+  saveInCookies: true,
+  label: '🌓',
+  autoMatchOsTheme: true
+}
+const darkmode = new Darkmode(options);
+window.darkmode = darkmode;
+darkmode.showWidget();
+</script>
+
+<script>
+NexT.utils.loadComments('#lv-container', () => {
+  window.livereOptions = {
+    refer: "2021/06/23/关于js中深拷贝和浅拷贝的思考/"
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>
