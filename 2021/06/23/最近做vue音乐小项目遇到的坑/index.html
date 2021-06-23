@@ -22,16 +22,25 @@
     var NexT = window.NexT || {};
     var CONFIG = {"hostname":"szq233.github.io","root":"/","images":"/images","scheme":"Pisces","version":"8.3.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"livere","storage":true,"lazyload":false,"nav":null,"activeClass":"livere"},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeIn","post_body":"fadeIn","coll_header":"fadeIn","sidebar":"pulse"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":-1,"unescape":false,"preload":false}};
   </script>
-<meta property="og:type" content="website">
-<meta property="og:title" content="Szq233&#39;s Blog">
-<meta property="og:url" content="https://szq233.github.io/archives/index.html">
+<meta name="description" content="概要：Chrome测试Vue音乐小项目出现的坑">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最近做vue音乐小项目遇到的坑">
+<meta property="og:url" content="https://szq233.github.io/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/index.html">
 <meta property="og:site_name" content="Szq233&#39;s Blog">
+<meta property="og:description" content="概要：Chrome测试Vue音乐小项目出现的坑">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://szq233.github.io/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/Snipaste_2021-06-23_03-54-24.png">
+<meta property="og:image" content="https://szq233.github.io/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/Snipaste_2021-06-23_03-56-23.png">
+<meta property="article:published_time" content="2021-06-22T19:40:23.000Z">
+<meta property="article:modified_time" content="2021-06-23T03:26:05.173Z">
 <meta property="article:author" content="Szq233">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="Chrome">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://szq233.github.io/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/Snipaste_2021-06-23_03-54-24.png">
 
 
-<link rel="canonical" href="https://szq233.github.io/archives/">
+<link rel="canonical" href="https://szq233.github.io/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/">
 
 
 <script class="page-configurations">
@@ -39,11 +48,11 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
-<title>归档 | Szq233's Blog</title>
+<title>最近做vue音乐小项目遇到的坑 | Szq233's Blog</title>
   
 
 
@@ -169,7 +178,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -182,6 +191,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text">1.audio元素</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%9B%A0%EF%BC%9A"><span class="nav-number">1.0.1.</span> <span class="nav-text">原因：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95%EF%BC%9A"><span class="nav-number">1.0.2.</span> <span class="nav-text">解决方法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%98%E5%A4%96%E8%AF%9D%EF%BC%9A"><span class="nav-number">1.0.3.</span> <span class="nav-text">题外话：</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -247,233 +257,119 @@
 </noscript>
 
 
-    <div class="main-inner archive posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
-  
-  
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
-        <span class="collection-header">嗯..! 目前共计 13 篇日志。 继续努力。</span>
-      </div>
 
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://szq233.github.io/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Szq233">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Szq233's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          最近做vue音乐小项目遇到的坑
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
       
-    <div class="collection-year">
-      <span class="collection-header">2021</span>
+
+      <time title="创建时间：2021-06-23 03:40:23 / 修改时间：11:26:05" itemprop="dateCreated datePublished" datetime="2021-06-23T03:40:23+08:00">2021-06-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Chrome/" itemprop="url" rel="index"><span itemprop="name">Chrome</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Chrome/Vue/" itemprop="url" rel="index"><span itemprop="name">Vue</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><em>概要：Chrome测试Vue音乐小项目出现的坑</em></p>
+<span id="more"></span>
+<h1>1.audio元素</h1>
+<p><em>Chrome等浏览器禁止音频自动播放以及操作Dom元素播放。</em></p>
+<p>使用Vue制作类网易云音乐单页面应用，准备使用隐藏audio元素，使用自己封装的音乐控件来获取并控制该audio元素的方法实现音乐控制的功能，但在引入单个audio的src测试时就出现了问题。</p>
+<p>首先是为了测试，为了方便查看效果，我将audio元素添加autoplay以实现自动播放，结果是失败，几乎不生效偶尔有效，我为元素添加上controls，发现直接点击控制器的播放按钮是可以正常播放音乐的。</p>
+<p><img src="/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/Snipaste_2021-06-23_03-54-24.png" alt></p>
+<p>好，既然自带属性无效，那我直接获取元素对象操作它的play()，在该模块mounted阶段执行play()（通过vuex状态中的全局音乐是否播放的表示变量判断是否执行）。废话不多时，代码敲上，好家伙直接报错。如图。</p>
+<p><img src="/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/Snipaste_2021-06-23_03-56-23.png" alt></p>
+<p>这意思是不让我操作audio的dom元素的play()方法？完，我自定义控件能控制audio就是靠这些audio对象的方法，这样还咋搞？我赶紧面向百度编程，惊喜的是，还真给我找到了原因和解决方法！😮</p>
+<h3 id="原因：">原因：</h3>
+<p>在新版Chrome浏览器（包括所有与Chrome使用相同内核的浏览器）中，已经不在允许自动播放音频和视频，设置了autoplay属性也一样不行。显示调用play()方法就如我之前的那样报错，这是因为，Chrome只允许用户对网页进行主动触发后才可自动播放音频和视频。严格地来说，是Chrome不允许在用户对网页进行触发之前播放音频，而视频其实是不受限制的。但因为视频文件同样包含了音频，所以也一同被禁止了。Chrome这样做的目的是为了防止开发者滥用自动播放功能而对用户产生骚扰。😑</p>
+<p>该问题原因发现于该<a target="_blank" rel="noopener" href="https://www.mzwu.com/article.asp?id=4411">博文</a>。</p>
+<h3 id="解决方法：">解决方法：</h3>
+<p>Chrome设置的是在用户没有对主页进行主动触发之前无法自动播放及调用播放，首先是诱导点击，提示用户点击操作后方可播放，使用添加allow=&quot;autoplay&quot;属性的iframe。怎么说，这是官方的解决方法，有点膈应人，目前没想到更好的方法，待更新。。。⁉️</p>
+<h3 id="题外话：">题外话：</h3>
+<p>想了好久，发现自己的小项目可以确保播放音乐之前肯定是有交互操作的，需要先添加交互操作，行吧，那没什么问题了。待我想到避开Chrome禁止音频自动播放的好方法。该问题先记录，待更新。。。⁉️</p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-06-23T03:40:23+08:00"
-              content="2021-06-23">
-          06-23
-        </time>
-      </div>
+    
+    
+    
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/" itemprop="url">
-            <span itemprop="name">最近做vue音乐小项目遇到的坑</span>
-          </a>
-      </div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Vue/" rel="tag"><i class="fa fa-tag"></i> Vue</a>
+              <a href="/tags/Chrome/" rel="tag"><i class="fa fa-tag"></i> Chrome</a>
+          </div>
 
-      
-    </header>
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/06/14/webpack%E5%85%A5%E5%9D%91/" rel="prev" title="webpack入坑">
+                  <i class="fa fa-chevron-left"></i> webpack入坑
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-06-14T14:44:36+08:00"
-              content="2021-06-14">
-          06-14
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/06/14/webpack%E5%85%A5%E5%9D%91/" itemprop="url">
-            <span itemprop="name">webpack入坑</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-06-04T05:20:54+08:00"
-              content="2021-06-04">
-          06-04
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/06/04/js%E4%B8%AD%E7%9A%84arguments%E5%92%8C-args/" itemprop="url">
-            <span itemprop="name">js中的arguments和...args</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-05-28T21:06:50+08:00"
-              content="2021-05-28">
-          05-28
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/05/28/%E9%81%87%E5%88%B0%E7%9A%84%E5%87%BD%E6%95%B0%E5%86%85%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E4%B8%8E%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E9%97%AE%E9%A2%98/" itemprop="url">
-            <span itemprop="name">遇到的函数内局部变量与全局变量的问题</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-05-25T07:14:34+08:00"
-              content="2021-05-25">
-          05-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/05/25/js%E4%B8%AD%E9%97%AD%E5%8C%85%E7%9A%84%E6%A6%82%E5%BF%B5/" itemprop="url">
-            <span itemprop="name">js中闭包的概念</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-05-25T06:52:20+08:00"
-              content="2021-05-25">
-          05-25
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/05/25/js%E4%B8%AD%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E6%A6%82%E5%BF%B5/" itemprop="url">
-            <span itemprop="name">js中回调函数的概念</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-05-16T10:50:38+08:00"
-              content="2021-05-16">
-          05-16
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/05/16/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/" itemprop="url">
-            <span itemprop="name">正向代理与反向代理</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-05-03T02:02:37+08:00"
-              content="2021-05-03">
-          05-03
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/05/03/js%E4%B8%AD-proto-%E4%B8%8Eprototype/" itemprop="url">
-            <span itemprop="name">JavaScript中__proto__与prototype</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-04-30T02:32:36+08:00"
-              content="2021-04-30">
-          04-30
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/04/30/%E5%85%B3%E9%97%ADNexT%E4%B8%BB%E9%A2%98motion%E5%AF%BC%E8%87%B4%E4%BE%A7%E8%BE%B9%E6%A0%8F%E6%B6%88%E5%A4%B1/" itemprop="url">
-            <span itemprop="name">关闭NexT主题动画导致侧边栏消失</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-04-29T22:44:01+08:00"
-              content="2021-04-29">
-          04-29
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2021/04/29/js%E6%95%B0%E6%8D%AE%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/" itemprop="url">
-            <span itemprop="name">JavaScript不同数据在内存中存储方式</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
+</div>
 
 
-    </div>
-  </div>
-  
-  
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
 
+
+
+
+    <div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC81MzM3Ny8yOTg1MQ=="></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -555,6 +451,21 @@ window.darkmode = darkmode;
 darkmode.showWidget();
 </script>
 
+<script>
+NexT.utils.loadComments('#lv-container', () => {
+  window.livereOptions = {
+    refer: "2021/06/23/最近做vue音乐小项目遇到的坑/"
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
 
 </body>
 </html>
