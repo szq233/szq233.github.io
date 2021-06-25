@@ -33,6 +33,96 @@
       </tags>
   </entry>
   <entry>
+    <title>js中的arguments和...args</title>
+    <url>/2021/06/04/js%E4%B8%AD%E7%9A%84arguments%E5%92%8C-args/</url>
+    <content><![CDATA[<p><em>概要：学习express中间件原理时候遇到的arguments对象和…args形参，从一脸懵逼到简单认识…</em></p>
+<span id="more"></span>
+<h2 id="引言：">引言：</h2>
+<p>最近在学习express框架的中间件原理时候遇到了一系列问题，让我总算是明白了啥叫基础不牢，地动山摇😭。首先是学习视频中使用的以下传参和解析方式。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> slice = <span class="built_in">Array</span>.prototype.slice；</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">const</span> info = &#123;&#125;;</span><br><span class="line">    info.stack = slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>刚看到时我是真的满脸问号，slice是从Array原型上提取的方法，这arguments是啥，找半天愣是没找着哪里传入的参数。</p>
+<h2 id="了解过程1：">了解过程1：</h2>
+<p>再搜遍百度后，发现原来这个参数是function自带的属性，是一个类数组对象，保存的是当前函数传入的参数，是一个函数本身就有的对象属性。那么问题又来了，一个对象怎么使用了数组的slice方法，再一遍搜索百度之后（学习就是面向百度的过程😆），发现，这个类数组对象有.length属性。可以使用数组的slice方法进行数组切片。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">max</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">arguments</span>.length);</span><br><span class="line">&#125;</span><br><span class="line">max(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);<span class="comment">//3</span></span><br></pre></td></tr></table></figure>
+<p>但是，由于该arguments对象继承于Object.prototype，原生没有slice方法，所以需要从数组原型链上提取slice方法来使用，所以其实第一个代码示例中的<code>slice.call(arguments, 1);</code>就是将arguments对象转换成数组，并切片返回第二个元素开始的所有元素的数组。</p>
+<h2 id="了解过程2：">了解过程2：</h2>
+<p>了解了这些，我回过头来看代码，清晰了很多，但是又发现了一个与arguments很相似的参数，<code>(...args)</code>。我以前学过的知识的印象里，这东西叫三点语法，作用是可以接收未知数量的参数。由于这个语法是真的和arguments有关系，我在百度arguments的同时了解到了<code>...args</code>的全貌。</p>
+<p>首先，这个语法是ES6引入的新语法，全名叫做rest parameters(剩余参数)，三个点后面是自定义的参数名，它接收后得到的是一个真正的数组，也确实可以使用来传入未知数量的参数，如下示例。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">...rest</span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(rest);</span><br><span class="line">&#125;</span><br><span class="line">foo(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);<span class="comment">//[1,2,3,4]</span></span><br></pre></td></tr></table></figure>
+<p>这样的特性使得它可以替代arguments来实现一些功能。👍</p>
+<p>但是，它既然叫做剩余参数，那么一定有其”剩余“的特性，如下示例代码可以说明。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//代码1</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo2</span>(<span class="params">a, ...rest</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">    <span class="built_in">console</span>.log(rest);</span><br><span class="line">&#125;</span><br><span class="line">foo2(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">//[2, 3, 4]</span></span><br><span class="line"><span class="comment">/////////////////////////////////////////</span></span><br><span class="line"><span class="comment">//代码2</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo3</span>(<span class="params">a, b, ...rest</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">    <span class="built_in">console</span>.log(b);</span><br><span class="line">    <span class="built_in">console</span>.log(rest);</span><br><span class="line">&#125;</span><br><span class="line">foo2(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">//2</span></span><br><span class="line"><span class="comment">//[3, 4]</span></span><br><span class="line"><span class="comment">/////////////////////////////////////////</span></span><br></pre></td></tr></table></figure>
+<p>可以说明，剩余参数接收的是全部参数中未与形参对应传入的剩下的参数。</p>
+<p>值得注意的是：</p>
+<p>1、三点语法只能放在所有形参的最后，不然会错，因为它已经包揽了未与它之前形参对应的剩余参数，再整个形参来接收看看有没有剩下的参数岂不是看不起它了。😹</p>
+<p>2、使用剩余参数后，函数的length属性会发生改变。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a, b, ...rest</span>) </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">foo.length; <span class="comment">//2</span></span><br></pre></td></tr></table></figure>
+<p>说明，length不包含rest。</p>
+<p>3、不能和arguments一起使用。</p>
+<h2 id="了解过程3：">了解过程3：</h2>
+<p>在演示所学的代码的时候，我发现三点语法还可以当做运算符来使用，实现如下的结果。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">max</span>(<span class="params">...args</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(...args);</span><br><span class="line">&#125;</span><br><span class="line">max(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);<span class="comment">//1 2 3</span></span><br></pre></td></tr></table></figure>
+<p>没错，对数组进行了解构，将[1, 2, 3]解构成了1,2,3，它可以将可遍历的数组，对象甚至是字符串进行解构，再进行赋值，就可以实现数组复制，对象复制，字符串转换数组等功能。</p>
+<h2 id="结束语：">结束语：</h2>
+<p>JavaScript基础知识内容太多了！😤😭</p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>js中回调函数的概念</title>
+    <url>/2021/05/25/js%E4%B8%AD%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
+    <content><![CDATA[<p><em>概要：Js中回调函数的概念…</em></p>
+<span id="more"></span>
+<h2 id="个人理解：">个人理解：</h2>
+<h3 id="回调函数的定义：">回调函数的定义：</h3>
+<p>将一个函数作为参数的形式传入另一个函数中，那么这个函数就是回调函数，另一个函数可以决定在何时何处调用这个传入的回调函数。</p>
+<p>比如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//不传参示例</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//函数foo，callback是接收回调函数的形参，不一定命名为callback</span></span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&quot;a&quot;</span>);<span class="comment">//打印a</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;b&quot;</span>);<span class="comment">//打印b</span></span><br><span class="line">    callback();<span class="comment">//执行回调函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&quot;c&quot;</span>);<span class="comment">//打印c</span></span><br><span class="line">&#125;</span><br><span class="line">foo(f);<span class="comment">//执行foo函数，将f函数作为参数传入，f函数就是回调函数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//传参示例</span></span><br><span class="line"><span class="keyword">var</span> param1 = <span class="string">&quot;a&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">param,callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//param是函数foo接收param1参数的形参</span></span><br><span class="line">    <span class="comment">//函数foo，callback是接收回调函数的形参，不一定命名为callback</span></span><br><span class="line">    <span class="keyword">let</span> param2 = <span class="string">&quot;c&quot;</span></span><br><span class="line">	<span class="built_in">console</span>.log(param);<span class="comment">//打印param1</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;b&quot;</span>);<span class="comment">//打印b</span></span><br><span class="line">    callback(param2);<span class="comment">//执行回调函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">param</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//param为接收param2参数的形参</span></span><br><span class="line">	<span class="built_in">console</span>.log(param)<span class="comment">//打印param2</span></span><br><span class="line">&#125;</span><br><span class="line">foo(param1,f);<span class="comment">//执行foo函数，将param1传入，将f函数作为参数传入，f函数就是回调函数</span></span><br></pre></td></tr></table></figure>
+<h3 id="javascript中回调函数的作用：">javascript中回调函数的作用：</h3>
+<p>1、代码的功能执行位置更清晰</p>
+<p>2、解决异步编程问题，使异步执行操作的执行顺序及先后变得可以控制。异步执行操作有：定时器、建立网络连接、读取网络流数据、向文件写入数据、Ajax提交、请求数据库服务，等等。</p>
+<p>但是，过度的使用回调函数会产生回调地狱问题，因此promise和async、await是解决异步编程的更优方案。</p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>js中闭包的概念</title>
+    <url>/2021/05/25/js%E4%B8%AD%E9%97%AD%E5%8C%85%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
+    <content><![CDATA[<p><em>概要：Js中闭包的概念…</em></p>
+<span id="more"></span>
+<h2 id="个人理解：">个人理解：</h2>
+<h3 id="js中闭包的定义💬：">js中闭包的定义💬：</h3>
+<p>一个函数及其对外部某几个参数的引用，形成的一个整体，可以称之为闭包。</p>
+<p>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">()(<span class="keyword">var</span> a = <span class="number">1</span>, b=<span class="number">2</span>;</span><br><span class="line">   <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> a+b;</span><br><span class="line">    &#125;)</span><br><span class="line"><span class="comment">//明显函数foo引用了foo函数外部的两个变量，这个函数和其引用的变量（环境）形成一个整体</span></span><br><span class="line"><span class="comment">//这样一个整体可以称之为闭包</span></span><br></pre></td></tr></table></figure>
+<p>我之前在学习闭包的时候所参照的一些返回函数和内嵌函数的例子，那么这里也简单做个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">&quot;全局变量&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a = <span class="string">&quot;局部变量&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">foo2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(a);</span><br><span class="line">	&#125; </span><br><span class="line">    <span class="keyword">return</span> foo2();</span><br><span class="line">&#125;</span><br><span class="line">foo1();<span class="comment">//打印“局部变量”</span></span><br><span class="line"><span class="comment">//foo2函数和局部变量a参数形成了闭包</span></span><br><span class="line"><span class="comment">//foo1函数实际执行return的foo2函数，foo2与局部变量a形成闭包，所以打印的是局部变量而不是全局变量</span></span><br></pre></td></tr></table></figure>
+<h3 id="那么为什么要这样使用闭包呢❓？">那么为什么要这样使用闭包呢❓？</h3>
+<p>原因是避免全局变量的影响。在es6的let、const新关键字出现之前，javascript只有函数作用域的概念而没有块作用域的概念。使用局部变量则需要函数内部定义，而如何访问到函数内部定义的局部变量，这就是闭包的作用。</p>
+<h3 id="闭包的作用😎：">闭包的作用😎：</h3>
+<p>1、通过闭包可以访问局部变量</p>
+<p>2、可以是局部变量驻留内存中，避免使用全局变量</p>
+<h3 id="闭包的缺陷😐：">闭包的缺陷😐：</h3>
+<p>由于闭包里作用域返回的局部变量资源不会被立刻销毁回收,所以可能会<strong>占用更多的内存</strong>;所以过度使用闭包会导致性能下降;</p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JavaScript不同数据在内存中存储方式</title>
     <url>/2021/04/29/js%E6%95%B0%E6%8D%AE%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<p><em>概要：Js数据类型在内存中的存储形式…</em></p>
@@ -83,6 +173,57 @@
 ]]></content>
       <tags>
         <tag>测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>webpack入坑</title>
+    <url>/2021/06/14/webpack%E5%85%A5%E5%9D%91/</url>
+    <content><![CDATA[<h2 id="结论：">结论：</h2>
+<p>webpack不同版本的options不同以及其使用的各个loader和plugin之间的版本差异导致的各种兼容问题真的是巨坑！！！😭</p>
+<h2 id="解决办法：">解决办法：</h2>
+<p>老老实实踩坑。💩</p>
+]]></content>
+      <categories>
+        <category>webpack</category>
+      </categories>
+      <tags>
+        <tag>webpack</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于js中深拷贝和浅拷贝思考</title>
+    <url>/2021/06/23/%E5%85%B3%E4%BA%8Ejs%E4%B8%AD%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E7%9A%84%E6%80%9D%E8%80%83/</url>
+    <content><![CDATA[<p><em>概要：对Js数据的深拷贝和浅拷贝做一个总结，加深记忆</em></p>
+<span id="more"></span>
+<h2 id="Js数据类型">Js数据类型</h2>
+<p>由基本数据类型和引用数据类型组成，简单数据类型包括（Number、String、Boolean、Undefined、Null）；引用数据类型包括（Object、Array、Function）。两者的数据结构和存储方式都有所不同。具体参考我写的另一篇博文（<a href="https://szq233.github.io/2021/04/29/js%E6%95%B0%E6%8D%AE%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/#more">Blog：js数据在内存中的存储方式-2021.04.29</a>）。</p>
+<p>由于不同的数据存储方式，Js引用数据类型拷贝具有深拷贝和浅拷贝的区别。</p>
+<h2 id="Js数据浅拷贝">Js数据浅拷贝</h2>
+<p>顾名思义，比较浅层面的拷贝。对于引用数据来说，一个变量保存了一个引用类型数据，那么该变量其实是保存了一个指向数据堆中该引用数据的一个引用地址（理解为“变量保存了一个指向数据堆中引用类型数据的指针”可能对一些小伙伴来说更好理解）。所以在浅层面变量保存的是引用地址（指针），浅拷贝就是拷贝引用地址（指针）。代码示例。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">	name: <span class="string">&#x27;测试对象&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//对象是一个引用类型数据，obj这个变量保存了指向&#123;name：‘测试对象’&#125;（方便理解这么写）这个对象的引用地址，这个引用地址是该数据在数据堆中位置，比如我拿二维坐标模拟，现在存的是（x=1米，y=2米）。</span></span><br><span class="line"><span class="keyword">const</span> obj2 = obj;</span><br><span class="line"><span class="comment">//实现浅拷贝</span></span><br><span class="line"><span class="comment">//obj2将obj保存的（x=1米，y=2米）这么一个坐标位置复制过来，赋值到自己身上。</span></span><br><span class="line"><span class="comment">//那么obj2对应的数据跟上面obj一样，是同一个&#123;name: &#x27;测试对象&#x27;&#125;,因为坐标是一样的嘛。</span></span><br></pre></td></tr></table></figure>
+<h4 id="实现浅拷贝的方法">实现浅拷贝的方法</h4>
+<h5 id="1、变量赋值">1、变量赋值</h5>
+<h2 id="Js数据深拷贝">Js数据深拷贝</h2>
+<p>顾名思义，实现深层次的拷贝，深挖到数据堆中，将对应数据堆中的数据进行拷贝一份而不是拷贝引用地址。</p>
+<p>如下代码示例。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//为方便解释，暂时对象中只包含基本类型数据的属性。</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">	name: <span class="string">&#x27;测试对象&#x27;</span>，</span><br><span class="line">    age: <span class="number">12</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj1 = &#123;&#125; <span class="comment">//初始化一个空对象，拿来拷贝obj</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">	obj1[key] = obj[key]</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//以下是测试</span></span><br><span class="line"><span class="comment">//使用node命令运行js文件</span></span><br><span class="line"><span class="built_in">console</span>.log(obj)<span class="comment">//&#123; name: &#x27;测试对象&#x27;, age: 12 &#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(obj1)<span class="comment">//&#123; name: &#x27;测试对象&#x27;, age: 12 &#125;</span></span><br><span class="line"><span class="comment">//两者内容一样，实现了拷贝</span></span><br><span class="line"><span class="built_in">console</span>.log(obj === obj1)<span class="comment">//false</span></span><br><span class="line"><span class="comment">//两者保存的不是同一个数据，实现了深拷贝</span></span><br></pre></td></tr></table></figure>
+<p>❗️但是在实际中对象属性不一定是基本类型数据，也有可能是引用类型数据，所以需要使用其他方法实现深拷贝。</p>
+<h4 id="实现深拷贝的方法">实现深拷贝的方法</h4>
+<h5 id="1、递归">1、递归</h5>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepClone</span>(<span class="params">source</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> newObj = source.constructor === <span class="built_in">Array</span> ? [] : &#123;&#125;;<span class="comment">//判断source（被拷贝目标）是数组还是对象</span></span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">in</span> source) &#123;</span><br><span class="line">    <span class="keyword">if</span>(source.hasOwnProperty(key)) &#123;</span><br><span class="line">      <span class="keyword">if</span>(source[key] &amp;&amp; <span class="keyword">typeof</span> source[key] === <span class="string">&#x27;object&#x27;</span>)&#123;</span><br><span class="line">        <span class="comment">//判断每一次遍历属性的值是否存在并且是对象，则递归</span></span><br><span class="line">        newObj[key] = source.constructor === <span class="built_in">Array</span> ? [] : &#123;&#125;;</span><br><span class="line">        newObj[key] = deepClone(source[key]);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        newObj[key] = source[key];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> newObj;<span class="comment">//返回拷贝处理后的对象，以用于递归，递归完成后该对象完成深拷贝</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//自定义一个含有许多引用类型数据属性的对象</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  name: <span class="string">&#x27;测试对象2&#x27;</span>,</span><br><span class="line">  list: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],</span><br><span class="line">  post: &#123;</span><br><span class="line">    title: <span class="string">&#x27;测试标题&#x27;</span>,</span><br><span class="line">    content: <span class="string">&#x27;测试内容&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  music: [</span><br><span class="line">    &#123;</span><br><span class="line">      mtitle: <span class="string">&#x27;晴天&#x27;</span>,</span><br><span class="line">      mauthor: <span class="string">&#x27;周杰伦&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      mtitle: <span class="string">&#x27;美人鱼&#x27;</span>,</span><br><span class="line">      mauthor: <span class="string">&#x27;林俊杰&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> obj1 = deepClone(obj);<span class="comment">//调用写好的拷贝方法，将obj拷贝给obj1</span></span><br><span class="line"><span class="comment">//以下是测试</span></span><br><span class="line"><span class="built_in">console</span>.log(obj);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  name: &#x27;测试对象2&#x27;,</span></span><br><span class="line"><span class="comment">  list: [ 1, 2, 3, 4, 5 ],</span></span><br><span class="line"><span class="comment">  post: &#123; title: &#x27;测试标题&#x27;, content: &#x27;测试内容&#x27; &#125;,</span></span><br><span class="line"><span class="comment">  music: [</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;晴天&#x27;, mauthor: &#x27;周杰伦&#x27; &#125;,</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;美人鱼&#x27;, mauthor: &#x27;林俊杰&#x27; &#125;</span></span><br><span class="line"><span class="comment">  ]</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">console</span>.log(obj1);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  name: &#x27;测试对象2&#x27;,</span></span><br><span class="line"><span class="comment">  list: [ 1, 2, 3, 4, 5 ],</span></span><br><span class="line"><span class="comment">  post: &#123; title: &#x27;测试标题&#x27;, content: &#x27;测试内容&#x27; &#125;,</span></span><br><span class="line"><span class="comment">  music: [</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;晴天&#x27;, mauthor: &#x27;周杰伦&#x27; &#125;,</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;美人鱼&#x27;, mauthor: &#x27;林俊杰&#x27; &#125;</span></span><br><span class="line"><span class="comment">  ]</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">//两者内容一样，实现了拷贝</span></span><br><span class="line"><span class="built_in">console</span>.log(obj === obj1);<span class="comment">//false</span></span><br><span class="line"><span class="comment">//两者不是引用的同一个对象，实现了深拷贝</span></span><br></pre></td></tr></table></figure>
+<h5 id="2、使用JSON-stringify和JSON-parse">2、使用JSON.stringify和JSON.parse</h5>
+<p>总所周知，json是一种字符串形式的数据，js中使用JSON方法将json数据在字符串与特殊类型数据之间转换，同样，总所周知，字符串在js中是基本数据类型String，拷贝基本类型数据，将在栈中开辟一个新空间并拷贝内容进其中。</p>
+<p>那么，就可以将一个引用类型数据转换为json字符串形式的数据，将这字符串先赋值给一个暂存变量，再将暂存变量中的json字符串转换为一个引用类型数据并赋值给一个新变量，就可以实现引用类型数据深拷贝。如下代码示例。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//自定义一个较为复杂的对象</span></span><br><span class="line"><span class="keyword">const</span> jsonObj = &#123;</span><br><span class="line">  name: <span class="string">&#x27;测试对象2&#x27;</span>,</span><br><span class="line">  list: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],</span><br><span class="line">  post: &#123;</span><br><span class="line">    title: <span class="string">&#x27;测试标题&#x27;</span>,</span><br><span class="line">    content: <span class="string">&#x27;测试内容&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  music: [</span><br><span class="line">    &#123;</span><br><span class="line">      mtitle: <span class="string">&#x27;晴天&#x27;</span>,</span><br><span class="line">      mauthor: <span class="string">&#x27;周杰伦&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      mtitle: <span class="string">&#x27;美人鱼&#x27;</span>,</span><br><span class="line">      mauthor: <span class="string">&#x27;林俊杰&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> jsonBuffer = <span class="built_in">JSON</span>.stringify(jsonObj);<span class="comment">//对象转换为json字符串，并赋值给一个暂时存储用的变量。</span></span><br><span class="line"><span class="keyword">const</span> jsonObj1 = <span class="built_in">JSON</span>.parse(jsonBuffer);<span class="comment">//将暂存变量中json字符串重新转换为对象，并赋值给一个新的变量。</span></span><br><span class="line">									<span class="comment">/*拷贝完成*/</span></span><br><span class="line"><span class="comment">//以下是测试</span></span><br><span class="line"><span class="built_in">console</span>.log(jsonObj);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  name: &#x27;测试对象2&#x27;,</span></span><br><span class="line"><span class="comment">  list: [ 1, 2, 3, 4, 5 ],</span></span><br><span class="line"><span class="comment">  post: &#123; title: &#x27;测试标题&#x27;, content: &#x27;测试内容&#x27; &#125;,</span></span><br><span class="line"><span class="comment">  music: [</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;晴天&#x27;, mauthor: &#x27;周杰伦&#x27; &#125;,</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;美人鱼&#x27;, mauthor: &#x27;林俊杰&#x27; &#125;</span></span><br><span class="line"><span class="comment">  ]</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">console</span>.log(jsonObj1);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  name: &#x27;测试对象2&#x27;,</span></span><br><span class="line"><span class="comment">  list: [ 1, 2, 3, 4, 5 ],</span></span><br><span class="line"><span class="comment">  post: &#123; title: &#x27;测试标题&#x27;, content: &#x27;测试内容&#x27; &#125;,</span></span><br><span class="line"><span class="comment">  music: [</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;晴天&#x27;, mauthor: &#x27;周杰伦&#x27; &#125;,</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;美人鱼&#x27;, mauthor: &#x27;林俊杰&#x27; &#125;</span></span><br><span class="line"><span class="comment">  ]</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">//两者内容一样，实现了拷贝</span></span><br><span class="line"><span class="built_in">console</span>.log(jsonObj === jsonObj1);</span><br><span class="line"><span class="comment">//两个变量引用的不是同一个对象，实现了深拷贝。</span></span><br></pre></td></tr></table></figure>
+<h2 id="总结">总结</h2>
+<p>写的有点多，一直敲的没停，手疼。😹</p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+        <tag>Js数据</tag>
       </tags>
   </entry>
   <entry>
@@ -152,52 +293,33 @@
       </tags>
   </entry>
   <entry>
-    <title>js中回调函数的概念</title>
-    <url>/2021/05/25/js%E4%B8%AD%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
-    <content><![CDATA[<p><em>概要：Js中回调函数的概念…</em></p>
+    <title>最近做vue音乐小项目遇到的坑</title>
+    <url>/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
+    <content><![CDATA[<p><em>概要：Chrome测试Vue音乐小项目出现的坑</em></p>
 <span id="more"></span>
-<h2 id="个人理解：">个人理解：</h2>
-<h3 id="回调函数的定义：">回调函数的定义：</h3>
-<p>将一个函数作为参数的形式传入另一个函数中，那么这个函数就是回调函数，另一个函数可以决定在何时何处调用这个传入的回调函数。</p>
-<p>比如：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//不传参示例</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//函数foo，callback是接收回调函数的形参，不一定命名为callback</span></span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&quot;a&quot;</span>);<span class="comment">//打印a</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;b&quot;</span>);<span class="comment">//打印b</span></span><br><span class="line">    callback();<span class="comment">//执行回调函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&quot;c&quot;</span>);<span class="comment">//打印c</span></span><br><span class="line">&#125;</span><br><span class="line">foo(f);<span class="comment">//执行foo函数，将f函数作为参数传入，f函数就是回调函数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//传参示例</span></span><br><span class="line"><span class="keyword">var</span> param1 = <span class="string">&quot;a&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">param,callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//param是函数foo接收param1参数的形参</span></span><br><span class="line">    <span class="comment">//函数foo，callback是接收回调函数的形参，不一定命名为callback</span></span><br><span class="line">    <span class="keyword">let</span> param2 = <span class="string">&quot;c&quot;</span></span><br><span class="line">	<span class="built_in">console</span>.log(param);<span class="comment">//打印param1</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;b&quot;</span>);<span class="comment">//打印b</span></span><br><span class="line">    callback(param2);<span class="comment">//执行回调函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">param</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//param为接收param2参数的形参</span></span><br><span class="line">	<span class="built_in">console</span>.log(param)<span class="comment">//打印param2</span></span><br><span class="line">&#125;</span><br><span class="line">foo(param1,f);<span class="comment">//执行foo函数，将param1传入，将f函数作为参数传入，f函数就是回调函数</span></span><br></pre></td></tr></table></figure>
-<h3 id="javascript中回调函数的作用：">javascript中回调函数的作用：</h3>
-<p>1、代码的功能执行位置更清晰</p>
-<p>2、解决异步编程问题，使异步执行操作的执行顺序及先后变得可以控制。异步执行操作有：定时器、建立网络连接、读取网络流数据、向文件写入数据、Ajax提交、请求数据库服务，等等。</p>
-<p>但是，过度的使用回调函数会产生回调地狱问题，因此promise和async、await是解决异步编程的更优方案。</p>
+<h1>1.audio元素</h1>
+<p><em>Chrome等浏览器禁止音频自动播放以及操作Dom元素播放。</em></p>
+<p>使用Vue制作类网易云音乐单页面应用，准备使用隐藏audio元素，使用自己封装的音乐控件来获取并控制该audio元素的方法实现音乐控制的功能，但在引入单个audio的src测试时就出现了问题。</p>
+<p>首先是为了测试，为了方便查看效果，我将audio元素添加autoplay以实现自动播放，结果是失败，几乎不生效偶尔有效，我为元素添加上controls，发现直接点击控制器的播放按钮是可以正常播放音乐的。</p>
+<p><img src="/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/Snipaste_2021-06-23_03-54-24.png" alt></p>
+<p>好，既然自带属性无效，那我直接获取元素对象操作它的play()，在该模块mounted阶段执行play()（通过vuex状态中的全局音乐是否播放的表示变量判断是否执行）。废话不多时，代码敲上，好家伙直接报错。如图。</p>
+<p><img src="/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/Snipaste_2021-06-23_03-56-23.png" alt></p>
+<p>这意思是不让我操作audio的dom元素的play()方法？完，我自定义控件能控制audio就是靠这些audio对象的方法，这样还咋搞？我赶紧面向百度编程，惊喜的是，还真给我找到了原因和解决方法！😮</p>
+<h3 id="原因：">原因：</h3>
+<p>在新版Chrome浏览器（包括所有与Chrome使用相同内核的浏览器）中，已经不在允许自动播放音频和视频，设置了autoplay属性也一样不行。显示调用play()方法就如我之前的那样报错，这是因为，Chrome只允许用户对网页进行主动触发后才可自动播放音频和视频。严格地来说，是Chrome不允许在用户对网页进行触发之前播放音频，而视频其实是不受限制的。但因为视频文件同样包含了音频，所以也一同被禁止了。Chrome这样做的目的是为了防止开发者滥用自动播放功能而对用户产生骚扰。😑</p>
+<p>该问题原因发现于该<a href="https://www.mzwu.com/article.asp?id=4411">博文</a>。</p>
+<h3 id="解决方法：">解决方法：</h3>
+<p>Chrome设置的是在用户没有对主页进行主动触发之前无法自动播放及调用播放，首先是诱导点击，提示用户点击操作后方可播放，使用添加allow=&quot;autoplay&quot;属性的iframe。怎么说，这是官方的解决方法，有点膈应人，目前没想到更好的方法，待更新。。。⁉️</p>
+<h3 id="题外话：">题外话：</h3>
+<p>想了好久，发现自己的小项目可以确保播放音乐之前肯定是有交互操作的，需要先添加交互操作，行吧，那没什么问题了。待我想到避开Chrome禁止音频自动播放的好方法。该问题先记录，待更新。。。⁉️</p>
 ]]></content>
       <categories>
-        <category>JavaScript</category>
+        <category>Chrome</category>
+        <category>Vue</category>
       </categories>
       <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>js中闭包的概念</title>
-    <url>/2021/05/25/js%E4%B8%AD%E9%97%AD%E5%8C%85%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
-    <content><![CDATA[<p><em>概要：Js中闭包的概念…</em></p>
-<span id="more"></span>
-<h2 id="个人理解：">个人理解：</h2>
-<h3 id="js中闭包的定义💬：">js中闭包的定义💬：</h3>
-<p>一个函数及其对外部某几个参数的引用，形成的一个整体，可以称之为闭包。</p>
-<p>例如：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">()(<span class="keyword">var</span> a = <span class="number">1</span>, b=<span class="number">2</span>;</span><br><span class="line">   <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> a+b;</span><br><span class="line">    &#125;)</span><br><span class="line"><span class="comment">//明显函数foo引用了foo函数外部的两个变量，这个函数和其引用的变量（环境）形成一个整体</span></span><br><span class="line"><span class="comment">//这样一个整体可以称之为闭包</span></span><br></pre></td></tr></table></figure>
-<p>我之前在学习闭包的时候所参照的一些返回函数和内嵌函数的例子，那么这里也简单做个例子：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">&quot;全局变量&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a = <span class="string">&quot;局部变量&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">foo2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(a);</span><br><span class="line">	&#125; </span><br><span class="line">    <span class="keyword">return</span> foo2();</span><br><span class="line">&#125;</span><br><span class="line">foo1();<span class="comment">//打印“局部变量”</span></span><br><span class="line"><span class="comment">//foo2函数和局部变量a参数形成了闭包</span></span><br><span class="line"><span class="comment">//foo1函数实际执行return的foo2函数，foo2与局部变量a形成闭包，所以打印的是局部变量而不是全局变量</span></span><br></pre></td></tr></table></figure>
-<h3 id="那么为什么要这样使用闭包呢❓？">那么为什么要这样使用闭包呢❓？</h3>
-<p>原因是避免全局变量的影响。在es6的let、const新关键字出现之前，javascript只有函数作用域的概念而没有块作用域的概念。使用局部变量则需要函数内部定义，而如何访问到函数内部定义的局部变量，这就是闭包的作用。</p>
-<h3 id="闭包的作用😎：">闭包的作用😎：</h3>
-<p>1、通过闭包可以访问局部变量</p>
-<p>2、可以是局部变量驻留内存中，避免使用全局变量</p>
-<h3 id="闭包的缺陷😐：">闭包的缺陷😐：</h3>
-<p>由于闭包里作用域返回的局部变量资源不会被立刻销毁回收,所以可能会<strong>占用更多的内存</strong>;所以过度使用闭包会导致性能下降;</p>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
+        <tag>Vue</tag>
+        <tag>Chrome</tag>
       </tags>
   </entry>
   <entry>
@@ -238,128 +360,6 @@
       </categories>
       <tags>
         <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>js中的arguments和...args</title>
-    <url>/2021/06/04/js%E4%B8%AD%E7%9A%84arguments%E5%92%8C-args/</url>
-    <content><![CDATA[<p><em>概要：学习express中间件原理时候遇到的arguments对象和…args形参，从一脸懵逼到简单认识…</em></p>
-<span id="more"></span>
-<h2 id="引言：">引言：</h2>
-<p>最近在学习express框架的中间件原理时候遇到了一系列问题，让我总算是明白了啥叫基础不牢，地动山摇😭。首先是学习视频中使用的以下传参和解析方式。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> slice = <span class="built_in">Array</span>.prototype.slice；</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">const</span> info = &#123;&#125;;</span><br><span class="line">    info.stack = slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>刚看到时我是真的满脸问号，slice是从Array原型上提取的方法，这arguments是啥，找半天愣是没找着哪里传入的参数。</p>
-<h2 id="了解过程1：">了解过程1：</h2>
-<p>再搜遍百度后，发现原来这个参数是function自带的属性，是一个类数组对象，保存的是当前函数传入的参数，是一个函数本身就有的对象属性。那么问题又来了，一个对象怎么使用了数组的slice方法，再一遍搜索百度之后（学习就是面向百度的过程😆），发现，这个类数组对象有.length属性。可以使用数组的slice方法进行数组切片。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">max</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">arguments</span>.length);</span><br><span class="line">&#125;</span><br><span class="line">max(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);<span class="comment">//3</span></span><br></pre></td></tr></table></figure>
-<p>但是，由于该arguments对象继承于Object.prototype，原生没有slice方法，所以需要从数组原型链上提取slice方法来使用，所以其实第一个代码示例中的<code>slice.call(arguments, 1);</code>就是将arguments对象转换成数组，并切片返回第二个元素开始的所有元素的数组。</p>
-<h2 id="了解过程2：">了解过程2：</h2>
-<p>了解了这些，我回过头来看代码，清晰了很多，但是又发现了一个与arguments很相似的参数，<code>(...args)</code>。我以前学过的知识的印象里，这东西叫三点语法，作用是可以接收未知数量的参数。由于这个语法是真的和arguments有关系，我在百度arguments的同时了解到了<code>...args</code>的全貌。</p>
-<p>首先，这个语法是ES6引入的新语法，全名叫做rest parameters(剩余参数)，三个点后面是自定义的参数名，它接收后得到的是一个真正的数组，也确实可以使用来传入未知数量的参数，如下示例。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">...rest</span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(rest);</span><br><span class="line">&#125;</span><br><span class="line">foo(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);<span class="comment">//[1,2,3,4]</span></span><br></pre></td></tr></table></figure>
-<p>这样的特性使得它可以替代arguments来实现一些功能。👍</p>
-<p>但是，它既然叫做剩余参数，那么一定有其”剩余“的特性，如下示例代码可以说明。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//代码1</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo2</span>(<span class="params">a, ...rest</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">    <span class="built_in">console</span>.log(rest);</span><br><span class="line">&#125;</span><br><span class="line">foo2(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">//[2, 3, 4]</span></span><br><span class="line"><span class="comment">/////////////////////////////////////////</span></span><br><span class="line"><span class="comment">//代码2</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo3</span>(<span class="params">a, b, ...rest</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">    <span class="built_in">console</span>.log(b);</span><br><span class="line">    <span class="built_in">console</span>.log(rest);</span><br><span class="line">&#125;</span><br><span class="line">foo2(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">//2</span></span><br><span class="line"><span class="comment">//[3, 4]</span></span><br><span class="line"><span class="comment">/////////////////////////////////////////</span></span><br></pre></td></tr></table></figure>
-<p>可以说明，剩余参数接收的是全部参数中未与形参对应传入的剩下的参数。</p>
-<p>值得注意的是：</p>
-<p>1、三点语法只能放在所有形参的最后，不然会错，因为它已经包揽了未与它之前形参对应的剩余参数，再整个形参来接收看看有没有剩下的参数岂不是看不起它了。😹</p>
-<p>2、使用剩余参数后，函数的length属性会发生改变。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a, b, ...rest</span>) </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">foo.length; <span class="comment">//2</span></span><br></pre></td></tr></table></figure>
-<p>说明，length不包含rest。</p>
-<p>3、不能和arguments一起使用。</p>
-<h2 id="了解过程3：">了解过程3：</h2>
-<p>在演示所学的代码的时候，我发现三点语法还可以当做运算符来使用，实现如下的结果。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">max</span>(<span class="params">...args</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(...args);</span><br><span class="line">&#125;</span><br><span class="line">max(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);<span class="comment">//1 2 3</span></span><br></pre></td></tr></table></figure>
-<p>没错，对数组进行了解构，将[1, 2, 3]解构成了1,2,3，它可以将可遍历的数组，对象甚至是字符串进行解构，再进行赋值，就可以实现数组复制，对象复制，字符串转换数组等功能。</p>
-<h2 id="结束语：">结束语：</h2>
-<p>JavaScript基础知识内容太多了！😤😭</p>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>webpack入坑</title>
-    <url>/2021/06/14/webpack%E5%85%A5%E5%9D%91/</url>
-    <content><![CDATA[<h2 id="结论：">结论：</h2>
-<p>webpack不同版本的options不同以及其使用的各个loader和plugin之间的版本差异导致的各种兼容问题真的是巨坑！！！😭</p>
-<h2 id="解决办法：">解决办法：</h2>
-<p>老老实实踩坑。💩</p>
-]]></content>
-      <categories>
-        <category>webpack</category>
-      </categories>
-      <tags>
-        <tag>webpack</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>最近做vue音乐小项目遇到的坑</title>
-    <url>/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
-    <content><![CDATA[<p><em>概要：Chrome测试Vue音乐小项目出现的坑</em></p>
-<span id="more"></span>
-<h1>1.audio元素</h1>
-<p><em>Chrome等浏览器禁止音频自动播放以及操作Dom元素播放。</em></p>
-<p>使用Vue制作类网易云音乐单页面应用，准备使用隐藏audio元素，使用自己封装的音乐控件来获取并控制该audio元素的方法实现音乐控制的功能，但在引入单个audio的src测试时就出现了问题。</p>
-<p>首先是为了测试，为了方便查看效果，我将audio元素添加autoplay以实现自动播放，结果是失败，几乎不生效偶尔有效，我为元素添加上controls，发现直接点击控制器的播放按钮是可以正常播放音乐的。</p>
-<p><img src="/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/Snipaste_2021-06-23_03-54-24.png" alt></p>
-<p>好，既然自带属性无效，那我直接获取元素对象操作它的play()，在该模块mounted阶段执行play()（通过vuex状态中的全局音乐是否播放的表示变量判断是否执行）。废话不多时，代码敲上，好家伙直接报错。如图。</p>
-<p><img src="/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/Snipaste_2021-06-23_03-56-23.png" alt></p>
-<p>这意思是不让我操作audio的dom元素的play()方法？完，我自定义控件能控制audio就是靠这些audio对象的方法，这样还咋搞？我赶紧面向百度编程，惊喜的是，还真给我找到了原因和解决方法！😮</p>
-<h3 id="原因：">原因：</h3>
-<p>在新版Chrome浏览器（包括所有与Chrome使用相同内核的浏览器）中，已经不在允许自动播放音频和视频，设置了autoplay属性也一样不行。显示调用play()方法就如我之前的那样报错，这是因为，Chrome只允许用户对网页进行主动触发后才可自动播放音频和视频。严格地来说，是Chrome不允许在用户对网页进行触发之前播放音频，而视频其实是不受限制的。但因为视频文件同样包含了音频，所以也一同被禁止了。Chrome这样做的目的是为了防止开发者滥用自动播放功能而对用户产生骚扰。😑</p>
-<p>该问题原因发现于该<a href="https://www.mzwu.com/article.asp?id=4411">博文</a>。</p>
-<h3 id="解决方法：">解决方法：</h3>
-<p>Chrome设置的是在用户没有对主页进行主动触发之前无法自动播放及调用播放，首先是诱导点击，提示用户点击操作后方可播放，使用添加allow=&quot;autoplay&quot;属性的iframe。怎么说，这是官方的解决方法，有点膈应人，目前没想到更好的方法，待更新。。。⁉️</p>
-<h3 id="题外话：">题外话：</h3>
-<p>想了好久，发现自己的小项目可以确保播放音乐之前肯定是有交互操作的，需要先添加交互操作，行吧，那没什么问题了。待我想到避开Chrome禁止音频自动播放的好方法。该问题先记录，待更新。。。⁉️</p>
-]]></content>
-      <categories>
-        <category>Chrome</category>
-        <category>Vue</category>
-      </categories>
-      <tags>
-        <tag>Vue</tag>
-        <tag>Chrome</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>关于js中深拷贝和浅拷贝思考</title>
-    <url>/2021/06/23/%E5%85%B3%E4%BA%8Ejs%E4%B8%AD%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%92%8C%E6%B5%85%E6%8B%B7%E8%B4%9D%E7%9A%84%E6%80%9D%E8%80%83/</url>
-    <content><![CDATA[<p><em>概要：对Js数据的深拷贝和浅拷贝做一个总结，加深记忆</em></p>
-<span id="more"></span>
-<h2 id="Js数据类型">Js数据类型</h2>
-<p>由基本数据类型和引用数据类型组成，简单数据类型包括（Number、String、Boolean、Undefined、Null）；引用数据类型包括（Object、Array、Function）。两者的数据结构和存储方式都有所不同。具体参考我写的另一篇博文（<a href="https://szq233.github.io/2021/04/29/js%E6%95%B0%E6%8D%AE%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/#more">Blog：js数据在内存中的存储方式-2021.04.29</a>）。</p>
-<p>由于不同的数据存储方式，Js引用数据类型拷贝具有深拷贝和浅拷贝的区别。</p>
-<h2 id="Js数据浅拷贝">Js数据浅拷贝</h2>
-<p>顾名思义，比较浅层面的拷贝。对于引用数据来说，一个变量保存了一个引用类型数据，那么该变量其实是保存了一个指向数据堆中该引用数据的一个引用地址（理解为“变量保存了一个指向数据堆中引用类型数据的指针”可能对一些小伙伴来说更好理解）。所以在浅层面变量保存的是引用地址（指针），浅拷贝就是拷贝引用地址（指针）。代码示例。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">	name: <span class="string">&#x27;测试对象&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//对象是一个引用类型数据，obj这个变量保存了指向&#123;name：‘测试对象’&#125;（方便理解这么写）这个对象的引用地址，这个引用地址是该数据在数据堆中位置，比如我拿二维坐标模拟，现在存的是（x=1米，y=2米）。</span></span><br><span class="line"><span class="keyword">const</span> obj2 = obj;</span><br><span class="line"><span class="comment">//实现浅拷贝</span></span><br><span class="line"><span class="comment">//obj2将obj保存的（x=1米，y=2米）这么一个坐标位置复制过来，赋值到自己身上。</span></span><br><span class="line"><span class="comment">//那么obj2对应的数据跟上面obj一样，是同一个&#123;name: &#x27;测试对象&#x27;&#125;,因为坐标是一样的嘛。</span></span><br></pre></td></tr></table></figure>
-<h4 id="实现浅拷贝的方法">实现浅拷贝的方法</h4>
-<h5 id="1、变量赋值">1、变量赋值</h5>
-<h2 id="Js数据深拷贝">Js数据深拷贝</h2>
-<p>顾名思义，实现深层次的拷贝，深挖到数据堆中，将对应数据堆中的数据进行拷贝一份而不是拷贝引用地址。</p>
-<p>如下代码示例。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//为方便解释，暂时对象中只包含基本类型数据的属性。</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">	name: <span class="string">&#x27;测试对象&#x27;</span>，</span><br><span class="line">    age: <span class="number">12</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj1 = &#123;&#125; <span class="comment">//初始化一个空对象，拿来拷贝obj</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">	obj1[key] = obj[key]</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//以下是测试</span></span><br><span class="line"><span class="comment">//使用node命令运行js文件</span></span><br><span class="line"><span class="built_in">console</span>.log(obj)<span class="comment">//&#123; name: &#x27;测试对象&#x27;, age: 12 &#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(obj1)<span class="comment">//&#123; name: &#x27;测试对象&#x27;, age: 12 &#125;</span></span><br><span class="line"><span class="comment">//两者内容一样，实现了拷贝</span></span><br><span class="line"><span class="built_in">console</span>.log(obj === obj1)<span class="comment">//false</span></span><br><span class="line"><span class="comment">//两者保存的不是同一个数据，实现了深拷贝</span></span><br></pre></td></tr></table></figure>
-<p>❗️但是在实际中对象属性不一定是基本类型数据，也有可能是引用类型数据，所以需要使用其他方法实现深拷贝。</p>
-<h4 id="实现深拷贝的方法">实现深拷贝的方法</h4>
-<h5 id="1、递归">1、递归</h5>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepClone</span>(<span class="params">source</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> newObj = source.constructor === <span class="built_in">Array</span> ? [] : &#123;&#125;;<span class="comment">//判断source（被拷贝目标）是数组还是对象</span></span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">in</span> source) &#123;</span><br><span class="line">    <span class="keyword">if</span>(source.hasOwnProperty(key)) &#123;</span><br><span class="line">      <span class="keyword">if</span>(source[key] &amp;&amp; <span class="keyword">typeof</span> source[key] === <span class="string">&#x27;object&#x27;</span>)&#123;</span><br><span class="line">        <span class="comment">//判断每一次遍历属性的值是否存在并且是对象，则递归</span></span><br><span class="line">        newObj[key] = source.constructor === <span class="built_in">Array</span> ? [] : &#123;&#125;;</span><br><span class="line">        newObj[key] = deepClone(source[key]);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        newObj[key] = source[key];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> newObj;<span class="comment">//返回拷贝处理后的对象，以用于递归，递归完成后该对象完成深拷贝</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//自定义一个含有许多引用类型数据属性的对象</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  name: <span class="string">&#x27;测试对象2&#x27;</span>,</span><br><span class="line">  list: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],</span><br><span class="line">  post: &#123;</span><br><span class="line">    title: <span class="string">&#x27;测试标题&#x27;</span>,</span><br><span class="line">    content: <span class="string">&#x27;测试内容&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  music: [</span><br><span class="line">    &#123;</span><br><span class="line">      mtitle: <span class="string">&#x27;晴天&#x27;</span>,</span><br><span class="line">      mauthor: <span class="string">&#x27;周杰伦&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      mtitle: <span class="string">&#x27;美人鱼&#x27;</span>,</span><br><span class="line">      mauthor: <span class="string">&#x27;林俊杰&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> obj1 = deepClone(obj);<span class="comment">//调用写好的拷贝方法，将obj拷贝给obj1</span></span><br><span class="line"><span class="comment">//以下是测试</span></span><br><span class="line"><span class="built_in">console</span>.log(obj);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  name: &#x27;测试对象2&#x27;,</span></span><br><span class="line"><span class="comment">  list: [ 1, 2, 3, 4, 5 ],</span></span><br><span class="line"><span class="comment">  post: &#123; title: &#x27;测试标题&#x27;, content: &#x27;测试内容&#x27; &#125;,</span></span><br><span class="line"><span class="comment">  music: [</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;晴天&#x27;, mauthor: &#x27;周杰伦&#x27; &#125;,</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;美人鱼&#x27;, mauthor: &#x27;林俊杰&#x27; &#125;</span></span><br><span class="line"><span class="comment">  ]</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">console</span>.log(obj1);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  name: &#x27;测试对象2&#x27;,</span></span><br><span class="line"><span class="comment">  list: [ 1, 2, 3, 4, 5 ],</span></span><br><span class="line"><span class="comment">  post: &#123; title: &#x27;测试标题&#x27;, content: &#x27;测试内容&#x27; &#125;,</span></span><br><span class="line"><span class="comment">  music: [</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;晴天&#x27;, mauthor: &#x27;周杰伦&#x27; &#125;,</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;美人鱼&#x27;, mauthor: &#x27;林俊杰&#x27; &#125;</span></span><br><span class="line"><span class="comment">  ]</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">//两者内容一样，实现了拷贝</span></span><br><span class="line"><span class="built_in">console</span>.log(obj === obj1);<span class="comment">//false</span></span><br><span class="line"><span class="comment">//两者不是引用的同一个对象，实现了深拷贝</span></span><br></pre></td></tr></table></figure>
-<h5 id="2、使用JSON-stringify和JSON-parse">2、使用JSON.stringify和JSON.parse</h5>
-<p>总所周知，json是一种字符串形式的数据，js中使用JSON方法将json数据在字符串与特殊类型数据之间转换，同样，总所周知，字符串在js中是基本数据类型String，拷贝基本类型数据，将在栈中开辟一个新空间并拷贝内容进其中。</p>
-<p>那么，就可以将一个引用类型数据转换为json字符串形式的数据，将这字符串先赋值给一个暂存变量，再将暂存变量中的json字符串转换为一个引用类型数据并赋值给一个新变量，就可以实现引用类型数据深拷贝。如下代码示例。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//自定义一个较为复杂的对象</span></span><br><span class="line"><span class="keyword">const</span> jsonObj = &#123;</span><br><span class="line">  name: <span class="string">&#x27;测试对象2&#x27;</span>,</span><br><span class="line">  list: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>],</span><br><span class="line">  post: &#123;</span><br><span class="line">    title: <span class="string">&#x27;测试标题&#x27;</span>,</span><br><span class="line">    content: <span class="string">&#x27;测试内容&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  music: [</span><br><span class="line">    &#123;</span><br><span class="line">      mtitle: <span class="string">&#x27;晴天&#x27;</span>,</span><br><span class="line">      mauthor: <span class="string">&#x27;周杰伦&#x27;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      mtitle: <span class="string">&#x27;美人鱼&#x27;</span>,</span><br><span class="line">      mauthor: <span class="string">&#x27;林俊杰&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> jsonBuffer = <span class="built_in">JSON</span>.stringify(jsonObj);<span class="comment">//对象转换为json字符串，并赋值给一个暂时存储用的变量。</span></span><br><span class="line"><span class="keyword">const</span> jsonObj1 = <span class="built_in">JSON</span>.parse(jsonBuffer);<span class="comment">//将暂存变量中json字符串重新转换为对象，并赋值给一个新的变量。</span></span><br><span class="line">									<span class="comment">/*拷贝完成*/</span></span><br><span class="line"><span class="comment">//以下是测试</span></span><br><span class="line"><span class="built_in">console</span>.log(jsonObj);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  name: &#x27;测试对象2&#x27;,</span></span><br><span class="line"><span class="comment">  list: [ 1, 2, 3, 4, 5 ],</span></span><br><span class="line"><span class="comment">  post: &#123; title: &#x27;测试标题&#x27;, content: &#x27;测试内容&#x27; &#125;,</span></span><br><span class="line"><span class="comment">  music: [</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;晴天&#x27;, mauthor: &#x27;周杰伦&#x27; &#125;,</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;美人鱼&#x27;, mauthor: &#x27;林俊杰&#x27; &#125;</span></span><br><span class="line"><span class="comment">  ]</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="built_in">console</span>.log(jsonObj1);</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">  name: &#x27;测试对象2&#x27;,</span></span><br><span class="line"><span class="comment">  list: [ 1, 2, 3, 4, 5 ],</span></span><br><span class="line"><span class="comment">  post: &#123; title: &#x27;测试标题&#x27;, content: &#x27;测试内容&#x27; &#125;,</span></span><br><span class="line"><span class="comment">  music: [</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;晴天&#x27;, mauthor: &#x27;周杰伦&#x27; &#125;,</span></span><br><span class="line"><span class="comment">    &#123; mtitle: &#x27;美人鱼&#x27;, mauthor: &#x27;林俊杰&#x27; &#125;</span></span><br><span class="line"><span class="comment">  ]</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">//两者内容一样，实现了拷贝</span></span><br><span class="line"><span class="built_in">console</span>.log(jsonObj === jsonObj1);</span><br><span class="line"><span class="comment">//两个变量引用的不是同一个对象，实现了深拷贝。</span></span><br></pre></td></tr></table></figure>
-<h2 id="总结">总结</h2>
-<p>写的有点多，一直敲的没停，手疼。😹</p>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-        <tag>Js数据</tag>
       </tags>
   </entry>
 </search>
