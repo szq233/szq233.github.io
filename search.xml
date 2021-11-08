@@ -7,6 +7,32 @@
 ]]></content>
   </entry>
   <entry>
+    <title>JavaScript中__proto__与prototype</title>
+    <url>/2021/05/03/js%E4%B8%AD-proto-%E4%B8%8Eprototype/</url>
+    <content><![CDATA[<p><em>概要：js中__proto__和prototype的区别与个人解读</em></p>
+<span id="more"></span>
+<h4 id="关于js中-proto-和prototype的说明">关于js中__proto__和prototype的说明</h4>
+<h5 id="区别：">区别：</h5>
+<p>__proto__是浏览器对实例化对象中[[prototype]]属性的命名，__proto__是属于对象的属性，prototype是属于函数对象的属性。</p>
+<h5 id="功能：">功能：</h5>
+<p>__proto__是访问prototype的入口。</p>
+<h4 id="个人解读：">个人解读：</h4>
+<h5 id="区别：-v2">区别：</h5>
+<p>prototype可以理解为在函数（函数对象）上的一个名为原型对象的属性，这里的原型对象是命名和功能意义双重含义的，所以prototype是函数（函数对象）上的一个属性，保存原型对象，意义上也可以叫做原型对象。那么这个原型对象的内容是一些可以继承的属性和方法。而__proto__是对象上的一个属性，通过这个属性可以访问prototype这个函数对象上的属性里的内容，也就是说<code>对象.__proto__</code>指向构造该对象的<code>函数.prototype</code>。</p>
+<p>比如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Fn1</span>(<span class="params">...</span>)</span>&#123;...&#125;; <span class="comment">//构造函数</span></span><br><span class="line"><span class="keyword">let</span> obj1 = <span class="keyword">new</span> Fn1(...); <span class="comment">//new一个对象</span></span><br><span class="line">obj1.__proto__ === Fn1.prototype; <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>当然，由于函数在js语言中也是对象，所以也有__proto__属性，指向构造该函数的函数的prototype，一次类推，这就形成了一条原型链，链子的尽头是Object.prototype为null，这个Object非泛指某一个对象，而是实际的构造所有对象的函数。</p>
+<h5 id="补充：">补充：</h5>
+<p>这里还要提一下construct这个属性，理解为构造器，该属性是函数，并挂载在函数的prototype属性上。每一个由函数构造而来的对象都有一个construct属性（继承于构造该对象的函数），该属性功能为访问（获取）构造该对象的构造函数，可以理解为<code>该构造函数.prototype.construct == 该构造函数</code>。<span style="color:red">该构造函数构造的对象.construct</span>继承自<span style="color:red">该构造函数.prototype.construct</span> == <span style="color:red">该构造函数</span></p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>js中回调函数的概念</title>
     <url>/2021/05/25/js%E4%B8%AD%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
     <content><![CDATA[<p><em>概要：Js中回调函数的概念…</em></p>
@@ -20,6 +46,47 @@
 <p>1、代码的功能执行位置更清晰</p>
 <p>2、解决异步编程问题，使异步执行操作的执行顺序及先后变得可以控制。异步执行操作有：定时器、建立网络连接、读取网络流数据、向文件写入数据、Ajax提交、请求数据库服务，等等。</p>
 <p>但是，过度的使用回调函数会产生回调地狱问题，因此promise和async、await是解决异步编程的更优方案。</p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>js中的arguments和...args</title>
+    <url>/2021/06/04/js%E4%B8%AD%E7%9A%84arguments%E5%92%8C-args/</url>
+    <content><![CDATA[<p><em>概要：学习express中间件原理时候遇到的arguments对象和…args形参，从一脸懵逼到简单认识…</em></p>
+<span id="more"></span>
+<h2 id="引言：">引言：</h2>
+<p>最近在学习express框架的中间件原理时候遇到了一系列问题，让我总算是明白了啥叫基础不牢，地动山摇😭。首先是学习视频中使用的以下传参和解析方式。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> slice = <span class="built_in">Array</span>.prototype.slice；</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">const</span> info = &#123;&#125;;</span><br><span class="line">    info.stack = slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>刚看到时我是真的满脸问号，slice是从Array原型上提取的方法，这arguments是啥，找半天愣是没找着哪里传入的参数。</p>
+<h2 id="了解过程1：">了解过程1：</h2>
+<p>再搜遍百度后，发现原来这个参数是function自带的属性，是一个类数组对象，保存的是当前函数传入的参数，是一个函数本身就有的对象属性。那么问题又来了，一个对象怎么使用了数组的slice方法，再一遍搜索百度之后（学习就是面向百度的过程😆），发现，这个类数组对象有.length属性。可以使用数组的slice方法进行数组切片。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">max</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">arguments</span>.length);</span><br><span class="line">&#125;</span><br><span class="line">max(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);<span class="comment">//3</span></span><br></pre></td></tr></table></figure>
+<p>但是，由于该arguments对象继承于Object.prototype，原生没有slice方法，所以需要从数组原型链上提取slice方法来使用，所以其实第一个代码示例中的<code>slice.call(arguments, 1);</code>就是将arguments对象转换成数组，并切片返回第二个元素开始的所有元素的数组。</p>
+<h2 id="了解过程2：">了解过程2：</h2>
+<p>了解了这些，我回过头来看代码，清晰了很多，但是又发现了一个与arguments很相似的参数，<code>(...args)</code>。我以前学过的知识的印象里，这东西叫三点语法，作用是可以接收未知数量的参数。由于这个语法是真的和arguments有关系，我在百度arguments的同时了解到了<code>...args</code>的全貌。</p>
+<p>首先，这个语法是ES6引入的新语法，全名叫做rest parameters(剩余参数)，三个点后面是自定义的参数名，它接收后得到的是一个真正的数组，也确实可以使用来传入未知数量的参数，如下示例。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">...rest</span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(rest);</span><br><span class="line">&#125;</span><br><span class="line">foo(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);<span class="comment">//[1,2,3,4]</span></span><br></pre></td></tr></table></figure>
+<p>这样的特性使得它可以替代arguments来实现一些功能。👍</p>
+<p>但是，它既然叫做剩余参数，那么一定有其”剩余“的特性，如下示例代码可以说明。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//代码1</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo2</span>(<span class="params">a, ...rest</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">    <span class="built_in">console</span>.log(rest);</span><br><span class="line">&#125;</span><br><span class="line">foo2(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">//[2, 3, 4]</span></span><br><span class="line"><span class="comment">/////////////////////////////////////////</span></span><br><span class="line"><span class="comment">//代码2</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo3</span>(<span class="params">a, b, ...rest</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">    <span class="built_in">console</span>.log(b);</span><br><span class="line">    <span class="built_in">console</span>.log(rest);</span><br><span class="line">&#125;</span><br><span class="line">foo2(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">//2</span></span><br><span class="line"><span class="comment">//[3, 4]</span></span><br><span class="line"><span class="comment">/////////////////////////////////////////</span></span><br></pre></td></tr></table></figure>
+<p>可以说明，剩余参数接收的是全部参数中未与形参对应传入的剩下的参数。</p>
+<p>值得注意的是：</p>
+<p>1、三点语法只能放在所有形参的最后，不然会错，因为它已经包揽了未与它之前形参对应的剩余参数，再整个形参来接收看看有没有剩下的参数岂不是看不起它了。😹</p>
+<p>2、使用剩余参数后，函数的length属性会发生改变。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a, b, ...rest</span>) </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">foo.length; <span class="comment">//2</span></span><br></pre></td></tr></table></figure>
+<p>说明，length不包含rest。</p>
+<p>3、不能和arguments一起使用。</p>
+<h2 id="了解过程3：">了解过程3：</h2>
+<p>在演示所学的代码的时候，我发现三点语法还可以当做运算符来使用，实现如下的结果。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">max</span>(<span class="params">...args</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(...args);</span><br><span class="line">&#125;</span><br><span class="line">max(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);<span class="comment">//1 2 3</span></span><br></pre></td></tr></table></figure>
+<p>没错，对数组进行了解构，将[1, 2, 3]解构成了1,2,3，它可以将可遍历的数组，对象甚至是字符串进行解构，再进行赋值，就可以实现数组复制，对象复制，字符串转换数组等功能。</p>
+<h2 id="结束语：">结束语：</h2>
+<p>JavaScript基础知识内容太多了！😤😭</p>
 ]]></content>
       <categories>
         <category>JavaScript</category>
@@ -287,73 +354,6 @@
 <p>😉👌</p>
 <p>感觉有点小问题。。。</p>
 <p>😳💦</p>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>js中的arguments和...args</title>
-    <url>/2021/06/04/js%E4%B8%AD%E7%9A%84arguments%E5%92%8C-args/</url>
-    <content><![CDATA[<p><em>概要：学习express中间件原理时候遇到的arguments对象和…args形参，从一脸懵逼到简单认识…</em></p>
-<span id="more"></span>
-<h2 id="引言：">引言：</h2>
-<p>最近在学习express框架的中间件原理时候遇到了一系列问题，让我总算是明白了啥叫基础不牢，地动山摇😭。首先是学习视频中使用的以下传参和解析方式。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> slice = <span class="built_in">Array</span>.prototype.slice；</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params">n</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">const</span> info = &#123;&#125;;</span><br><span class="line">    info.stack = slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>刚看到时我是真的满脸问号，slice是从Array原型上提取的方法，这arguments是啥，找半天愣是没找着哪里传入的参数。</p>
-<h2 id="了解过程1：">了解过程1：</h2>
-<p>再搜遍百度后，发现原来这个参数是function自带的属性，是一个类数组对象，保存的是当前函数传入的参数，是一个函数本身就有的对象属性。那么问题又来了，一个对象怎么使用了数组的slice方法，再一遍搜索百度之后（学习就是面向百度的过程😆），发现，这个类数组对象有.length属性。可以使用数组的slice方法进行数组切片。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">max</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">arguments</span>.length);</span><br><span class="line">&#125;</span><br><span class="line">max(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);<span class="comment">//3</span></span><br></pre></td></tr></table></figure>
-<p>但是，由于该arguments对象继承于Object.prototype，原生没有slice方法，所以需要从数组原型链上提取slice方法来使用，所以其实第一个代码示例中的<code>slice.call(arguments, 1);</code>就是将arguments对象转换成数组，并切片返回第二个元素开始的所有元素的数组。</p>
-<h2 id="了解过程2：">了解过程2：</h2>
-<p>了解了这些，我回过头来看代码，清晰了很多，但是又发现了一个与arguments很相似的参数，<code>(...args)</code>。我以前学过的知识的印象里，这东西叫三点语法，作用是可以接收未知数量的参数。由于这个语法是真的和arguments有关系，我在百度arguments的同时了解到了<code>...args</code>的全貌。</p>
-<p>首先，这个语法是ES6引入的新语法，全名叫做rest parameters(剩余参数)，三个点后面是自定义的参数名，它接收后得到的是一个真正的数组，也确实可以使用来传入未知数量的参数，如下示例。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">...rest</span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(rest);</span><br><span class="line">&#125;</span><br><span class="line">foo(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);<span class="comment">//[1,2,3,4]</span></span><br></pre></td></tr></table></figure>
-<p>这样的特性使得它可以替代arguments来实现一些功能。👍</p>
-<p>但是，它既然叫做剩余参数，那么一定有其”剩余“的特性，如下示例代码可以说明。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//代码1</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo2</span>(<span class="params">a, ...rest</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">    <span class="built_in">console</span>.log(rest);</span><br><span class="line">&#125;</span><br><span class="line">foo2(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">//[2, 3, 4]</span></span><br><span class="line"><span class="comment">/////////////////////////////////////////</span></span><br><span class="line"><span class="comment">//代码2</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo3</span>(<span class="params">a, b, ...rest</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(a);</span><br><span class="line">    <span class="built_in">console</span>.log(b);</span><br><span class="line">    <span class="built_in">console</span>.log(rest);</span><br><span class="line">&#125;</span><br><span class="line">foo2(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line"><span class="comment">//1</span></span><br><span class="line"><span class="comment">//2</span></span><br><span class="line"><span class="comment">//[3, 4]</span></span><br><span class="line"><span class="comment">/////////////////////////////////////////</span></span><br></pre></td></tr></table></figure>
-<p>可以说明，剩余参数接收的是全部参数中未与形参对应传入的剩下的参数。</p>
-<p>值得注意的是：</p>
-<p>1、三点语法只能放在所有形参的最后，不然会错，因为它已经包揽了未与它之前形参对应的剩余参数，再整个形参来接收看看有没有剩下的参数岂不是看不起它了。😹</p>
-<p>2、使用剩余参数后，函数的length属性会发生改变。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">a, b, ...rest</span>) </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">foo.length; <span class="comment">//2</span></span><br></pre></td></tr></table></figure>
-<p>说明，length不包含rest。</p>
-<p>3、不能和arguments一起使用。</p>
-<h2 id="了解过程3：">了解过程3：</h2>
-<p>在演示所学的代码的时候，我发现三点语法还可以当做运算符来使用，实现如下的结果。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">max</span>(<span class="params">...args</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(...args);</span><br><span class="line">&#125;</span><br><span class="line">max(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);<span class="comment">//1 2 3</span></span><br></pre></td></tr></table></figure>
-<p>没错，对数组进行了解构，将[1, 2, 3]解构成了1,2,3，它可以将可遍历的数组，对象甚至是字符串进行解构，再进行赋值，就可以实现数组复制，对象复制，字符串转换数组等功能。</p>
-<h2 id="结束语：">结束语：</h2>
-<p>JavaScript基础知识内容太多了！😤😭</p>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JavaScript中__proto__与prototype</title>
-    <url>/2021/05/03/js%E4%B8%AD-proto-%E4%B8%8Eprototype/</url>
-    <content><![CDATA[<p><em>概要：js中__proto__和prototype的区别与个人解读</em></p>
-<span id="more"></span>
-<h4 id="关于js中-proto-和prototype的说明">关于js中__proto__和prototype的说明</h4>
-<h5 id="区别：">区别：</h5>
-<p>__proto__是浏览器对实例化对象中[[prototype]]属性的命名，__proto__是属于对象的属性，prototype是属于函数对象的属性。</p>
-<h5 id="功能：">功能：</h5>
-<p>__proto__是访问prototype的入口。</p>
-<h4 id="个人解读：">个人解读：</h4>
-<h5 id="区别：-v2">区别：</h5>
-<p>prototype可以理解为在函数（函数对象）上的一个名为原型对象的属性，这里的原型对象是命名和功能意义双重含义的，所以prototype是函数（函数对象）上的一个属性，保存原型对象，意义上也可以叫做原型对象。那么这个原型对象的内容是一些可以继承的属性和方法。而__proto__是对象上的一个属性，通过这个属性可以访问prototype这个函数对象上的属性里的内容，也就是说<code>对象.__proto__</code>指向构造该对象的<code>函数.prototype</code>。</p>
-<p>比如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Fn1</span>(<span class="params">...</span>)</span>&#123;...&#125;; <span class="comment">//构造函数</span></span><br><span class="line"><span class="keyword">let</span> obj1 = <span class="keyword">new</span> Fn1(...); <span class="comment">//new一个对象</span></span><br><span class="line">obj1.__proto__ === Fn1.prototype; <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-<p>当然，由于函数在js语言中也是对象，所以也有__proto__属性，指向构造该函数的函数的prototype，一次类推，这就形成了一条原型链，链子的尽头是Object.prototype为null，这个Object非泛指某一个对象，而是实际的构造所有对象的函数。</p>
-<h5 id="补充：">补充：</h5>
-<p>这里还要提一下construct这个属性，理解为构造器，该属性是函数，并挂载在函数的prototype属性上。每一个由函数构造而来的对象都有一个construct属性（继承于构造该对象的函数），该属性功能为访问（获取）构造该对象的构造函数，可以理解为<code>该构造函数.prototype.construct == 该构造函数</code>。<span style="color:red">该构造函数构造的对象.construct</span>继承自<span style="color:red">该构造函数.prototype.construct</span> == <span style="color:red">该构造函数</span></p>
 ]]></content>
       <categories>
         <category>JavaScript</category>
