@@ -2,35 +2,9 @@
 <search>
   <entry>
     <title>Hello World</title>
-    <url>/2021/04/27/hello-world/</url>
+    <url>/2021/08/08/hello-world/</url>
     <content><![CDATA[<p>Hello World</p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>JavaScript中__proto__与prototype</title>
-    <url>/2021/05/03/js%E4%B8%AD-proto-%E4%B8%8Eprototype/</url>
-    <content><![CDATA[<p><em>概要：js中__proto__和prototype的区别与个人解读</em></p>
-<span id="more"></span>
-<h4 id="关于js中-proto-和prototype的说明">关于js中__proto__和prototype的说明</h4>
-<h5 id="区别：">区别：</h5>
-<p>__proto__是浏览器对实例化对象中[[prototype]]属性的命名，__proto__是属于对象的属性，prototype是属于函数对象的属性。</p>
-<h5 id="功能：">功能：</h5>
-<p>__proto__是访问prototype的入口。</p>
-<h4 id="个人解读：">个人解读：</h4>
-<h5 id="区别：-v2">区别：</h5>
-<p>prototype可以理解为在函数（函数对象）上的一个名为原型对象的属性，这里的原型对象是命名和功能意义双重含义的，所以prototype是函数（函数对象）上的一个属性，保存原型对象，意义上也可以叫做原型对象。那么这个原型对象的内容是一些可以继承的属性和方法。而__proto__是对象上的一个属性，通过这个属性可以访问prototype这个函数对象上的属性里的内容，也就是说<code>对象.__proto__</code>指向构造该对象的<code>函数.prototype</code>。</p>
-<p>比如：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Fn1</span>(<span class="params">...</span>)</span>&#123;...&#125;; <span class="comment">//构造函数</span></span><br><span class="line"><span class="keyword">let</span> obj1 = <span class="keyword">new</span> Fn1(...); <span class="comment">//new一个对象</span></span><br><span class="line">obj1.__proto__ === Fn1.prototype; <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-<p>当然，由于函数在js语言中也是对象，所以也有__proto__属性，指向构造该函数的函数的prototype，一次类推，这就形成了一条原型链，链子的尽头是Object.prototype为null，这个Object非泛指某一个对象，而是实际的构造所有对象的函数。</p>
-<h5 id="补充：">补充：</h5>
-<p>这里还要提一下construct这个属性，理解为构造器，该属性是函数，并挂载在函数的prototype属性上。每一个由函数构造而来的对象都有一个construct属性（继承于构造该对象的函数），该属性功能为访问（获取）构造该对象的构造函数，可以理解为<code>该构造函数.prototype.construct == 该构造函数</code>。<span style="color:red">该构造函数构造的对象.construct</span>继承自<span style="color:red">该构造函数.prototype.construct</span> == <span style="color:red">该构造函数</span></p>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
   </entry>
   <entry>
     <title>js中的arguments和...args</title>
@@ -65,28 +39,6 @@
 <p>没错，对数组进行了解构，将[1, 2, 3]解构成了1,2,3，它可以将可遍历的数组，对象甚至是字符串进行解构，再进行赋值，就可以实现数组复制，对象复制，字符串转换数组等功能。</p>
 <h2 id="结束语：">结束语：</h2>
 <p>JavaScript基础知识内容太多了！😤😭</p>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>js中回调函数的概念</title>
-    <url>/2021/05/25/js%E4%B8%AD%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
-    <content><![CDATA[<p><em>概要：Js中回调函数的概念…</em></p>
-<span id="more"></span>
-<h2 id="个人理解：">个人理解：</h2>
-<h3 id="回调函数的定义：">回调函数的定义：</h3>
-<p>将一个函数作为参数的形式传入另一个函数中，那么这个函数就是回调函数，另一个函数可以决定在何时何处调用这个传入的回调函数。</p>
-<p>比如：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//不传参示例</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//函数foo，callback是接收回调函数的形参，不一定命名为callback</span></span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&quot;a&quot;</span>);<span class="comment">//打印a</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;b&quot;</span>);<span class="comment">//打印b</span></span><br><span class="line">    callback();<span class="comment">//执行回调函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&quot;c&quot;</span>);<span class="comment">//打印c</span></span><br><span class="line">&#125;</span><br><span class="line">foo(f);<span class="comment">//执行foo函数，将f函数作为参数传入，f函数就是回调函数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//传参示例</span></span><br><span class="line"><span class="keyword">var</span> param1 = <span class="string">&quot;a&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">param,callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//param是函数foo接收param1参数的形参</span></span><br><span class="line">    <span class="comment">//函数foo，callback是接收回调函数的形参，不一定命名为callback</span></span><br><span class="line">    <span class="keyword">let</span> param2 = <span class="string">&quot;c&quot;</span></span><br><span class="line">	<span class="built_in">console</span>.log(param);<span class="comment">//打印param1</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;b&quot;</span>);<span class="comment">//打印b</span></span><br><span class="line">    callback(param2);<span class="comment">//执行回调函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">param</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//param为接收param2参数的形参</span></span><br><span class="line">	<span class="built_in">console</span>.log(param)<span class="comment">//打印param2</span></span><br><span class="line">&#125;</span><br><span class="line">foo(param1,f);<span class="comment">//执行foo函数，将param1传入，将f函数作为参数传入，f函数就是回调函数</span></span><br></pre></td></tr></table></figure>
-<h3 id="javascript中回调函数的作用：">javascript中回调函数的作用：</h3>
-<p>1、代码的功能执行位置更清晰</p>
-<p>2、解决异步编程问题，使异步执行操作的执行顺序及先后变得可以控制。异步执行操作有：定时器、建立网络连接、读取网络流数据、向文件写入数据、Ajax提交、请求数据库服务，等等。</p>
-<p>但是，过度的使用回调函数会产生回调地狱问题，因此promise和async、await是解决异步编程的更优方案。</p>
 ]]></content>
       <categories>
         <category>JavaScript</category>
@@ -140,12 +92,12 @@
 <h2 id="数据存储方式：">数据存储方式：</h2>
 <h3 id="1、简单数据类型：">1、简单数据类型：</h3>
 <p>​	简单数据类型保存在栈中，这些类型在内存中别占有固定大小，他们的值保存在栈空间，按值访问。变量在声明过程中，会在栈中开辟一段内存空间，变量值直接存在该内存中，变量读写的是它们实际保存的值。</p>
-<img src="/2021/04/29/js%E6%95%B0%E6%8D%AE%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/01.png" class>
+<img src="/.io//04/29/js%E6%95%B0%E6%8D%AE%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/01.png" class>
 <p>​	简单数据数据复制时，会为新声明的变量直接开辟一段新空间， 然后把值复制到为新变量分配的空间中</p>
 <p>​	简单数据类在当前执行环境结束时销毁。</p>
 <h3 id="2、复杂数据类型：">2、复杂数据类型：</h3>
 <p>​	复杂数据类型是不固定大小的数据，但是存放他们的地址大小是固定的，所以把地址保存在栈中，值保存在堆中。复杂数据类型是一个指针，指针保存在栈中，但是指针指向的是堆。即存储复杂数据类型的变量保存在栈中，数据本身保存在堆中。读取其数据时，先访问栈中的地址，通过地址找到存在堆中的数据。</p>
-<p><img src="/2021/04/29/js%E6%95%B0%E6%8D%AE%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/02.png" alt></p>
+<p><img src="/.io//02.png" alt></p>
 <p>​	复杂数据类型在进行拷贝的时候，分为深拷贝和浅拷贝：<br>
 ​			浅拷贝：复制的是引用地址，所以拷贝的变量存储的引用地址和原来的指向堆中同一个地址。</p>
 <p>​	深拷贝：栈中开辟一段新的空间存储复制的变量，堆中开辟一个新的空间存储复制的内容，栈中变量存储的引用地址指向堆中复制的一个新的地址。</p>
@@ -237,9 +189,9 @@
 <p>花了段时间找问题，在打开浏览器调试功能时，发现.sidebar元素被赋予了<code>visiblity：hidden</code>属性，在修改为<code>visiblity：visible</code>后，侧边栏再次可见。于是尝试找样式源文件，最终解决问题。</p>
 <h5 id="解决方法：">解决方法：</h5>
 <p>因为我用的NexT主题的Pisces的scheme，其他类型的可以参照尝试解决，找到主题文件夹如下图路径中的_sidebar.styl文件，打开该文件。</p>
-<p><img src="/2021/04/30/%E5%85%B3%E9%97%ADNexT%E4%B8%BB%E9%A2%98motion%E5%AF%BC%E8%87%B4%E4%BE%A7%E8%BE%B9%E6%A0%8F%E6%B6%88%E5%A4%B1/03.png" alt></p>
+<p><img src="/.io//03.png" alt></p>
 <p>搜索visibility，将visibility: hidden;修改为visibility: visible;</p>
-<p><img src="/2021/04/30/%E5%85%B3%E9%97%ADNexT%E4%B8%BB%E9%A2%98motion%E5%AF%BC%E8%87%B4%E4%BE%A7%E8%BE%B9%E6%A0%8F%E6%B6%88%E5%A4%B1/04.png" alt></p>
+<p><img src="/.io//04.png" alt></p>
 <p>保存，执行hexo cl、hexo g、hexo d稍微等待一会，刷新博客，发现侧边栏可以正常显示</p>
 ]]></content>
       <categories>
@@ -249,6 +201,36 @@
       <tags>
         <tag>Hexo</tag>
         <tag>NexT</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>最近做vue音乐小项目遇到的坑</title>
+    <url>/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
+    <content><![CDATA[<p><em>概要：Chrome测试Vue音乐小项目出现的坑</em></p>
+<span id="more"></span>
+<h1>1.audio元素</h1>
+<p><em>Chrome等浏览器禁止音频自动播放以及操作Dom元素播放。</em></p>
+<p>使用Vue制作类网易云音乐单页面应用，准备使用隐藏audio元素，使用自己封装的音乐控件来获取并控制该audio元素的方法实现音乐控制的功能，但在引入单个audio的src测试时就出现了问题。</p>
+<p>首先是为了测试，为了方便查看效果，我将audio元素添加autoplay以实现自动播放，结果是失败，几乎不生效偶尔有效，我为元素添加上controls，发现直接点击控制器的播放按钮是可以正常播放音乐的。</p>
+<p><img src="/.io//Snipaste_2021-06-23_03-54-24.png" alt></p>
+<p>好，既然自带属性无效，那我直接获取元素对象操作它的play()，在该模块mounted阶段执行play()（通过vuex状态中的全局音乐是否播放的表示变量判断是否执行）。废话不多时，代码敲上，好家伙直接报错。如图。</p>
+<p><img src="/.io//Snipaste_2021-06-23_03-56-23.png" alt></p>
+<p>这意思是不让我操作audio的dom元素的play()方法？完，我自定义控件能控制audio就是靠这些audio对象的方法，这样还咋搞？我赶紧面向百度编程，惊喜的是，还真给我找到了原因和解决方法！😮</p>
+<h3 id="原因：">原因：</h3>
+<p>在新版Chrome浏览器（包括所有与Chrome使用相同内核的浏览器）中，已经不在允许自动播放音频和视频，设置了autoplay属性也一样不行。显示调用play()方法就如我之前的那样报错，这是因为，Chrome只允许用户对网页进行主动触发后才可自动播放音频和视频。严格地来说，是Chrome不允许在用户对网页进行触发之前播放音频，而视频其实是不受限制的。但因为视频文件同样包含了音频，所以也一同被禁止了。Chrome这样做的目的是为了防止开发者滥用自动播放功能而对用户产生骚扰。😑</p>
+<p>该问题原因发现于该<a href="https://www.mzwu.com/article.asp?id=4411">博文</a>。</p>
+<h3 id="解决方法：">解决方法：</h3>
+<p>Chrome设置的是在用户没有对主页进行主动触发之前无法自动播放及调用播放，首先是诱导点击，提示用户点击操作后方可播放，使用添加allow=&quot;autoplay&quot;属性的iframe。怎么说，这是官方的解决方法，有点膈应人，目前没想到更好的方法，待更新。。。⁉️</p>
+<h3 id="题外话：">题外话：</h3>
+<p>想了好久，发现自己的小项目可以确保播放音乐之前肯定是有交互操作的，需要先添加交互操作，行吧，那没什么问题了。待我想到避开Chrome禁止音频自动播放的好方法。该问题先记录，待更新。。。⁉️</p>
+]]></content>
+      <categories>
+        <category>Chrome</category>
+        <category>Vue</category>
+      </categories>
+      <tags>
+        <tag>Vue</tag>
+        <tag>Chrome</tag>
       </tags>
   </entry>
   <entry>
@@ -278,9 +260,9 @@
 </ol>
 <h3 id="图解：">图解：</h3>
 <h4 id="正向代理：">正向代理：</h4>
-<p><img src="/2021/05/16/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86.png" alt></p>
+<p><img src="/.io//%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86.png" alt></p>
 <h4 id="反向代理：">反向代理：</h4>
-<p><img src="/2021/05/16/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86.png" alt></p>
+<p><img src="/.io//%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86.png" alt></p>
 <h4 id="网络大神总结👍：">网络大神总结👍：</h4>
 <p>正向代理：买票的黄牛</p>
 <p>反向代理：租房的代理</p>
@@ -290,36 +272,6 @@
       </categories>
       <tags>
         <tag>服务器</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>最近做vue音乐小项目遇到的坑</title>
-    <url>/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
-    <content><![CDATA[<p><em>概要：Chrome测试Vue音乐小项目出现的坑</em></p>
-<span id="more"></span>
-<h1>1.audio元素</h1>
-<p><em>Chrome等浏览器禁止音频自动播放以及操作Dom元素播放。</em></p>
-<p>使用Vue制作类网易云音乐单页面应用，准备使用隐藏audio元素，使用自己封装的音乐控件来获取并控制该audio元素的方法实现音乐控制的功能，但在引入单个audio的src测试时就出现了问题。</p>
-<p>首先是为了测试，为了方便查看效果，我将audio元素添加autoplay以实现自动播放，结果是失败，几乎不生效偶尔有效，我为元素添加上controls，发现直接点击控制器的播放按钮是可以正常播放音乐的。</p>
-<p><img src="/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/Snipaste_2021-06-23_03-54-24.png" alt></p>
-<p>好，既然自带属性无效，那我直接获取元素对象操作它的play()，在该模块mounted阶段执行play()（通过vuex状态中的全局音乐是否播放的表示变量判断是否执行）。废话不多时，代码敲上，好家伙直接报错。如图。</p>
-<p><img src="/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/Snipaste_2021-06-23_03-56-23.png" alt></p>
-<p>这意思是不让我操作audio的dom元素的play()方法？完，我自定义控件能控制audio就是靠这些audio对象的方法，这样还咋搞？我赶紧面向百度编程，惊喜的是，还真给我找到了原因和解决方法！😮</p>
-<h3 id="原因：">原因：</h3>
-<p>在新版Chrome浏览器（包括所有与Chrome使用相同内核的浏览器）中，已经不在允许自动播放音频和视频，设置了autoplay属性也一样不行。显示调用play()方法就如我之前的那样报错，这是因为，Chrome只允许用户对网页进行主动触发后才可自动播放音频和视频。严格地来说，是Chrome不允许在用户对网页进行触发之前播放音频，而视频其实是不受限制的。但因为视频文件同样包含了音频，所以也一同被禁止了。Chrome这样做的目的是为了防止开发者滥用自动播放功能而对用户产生骚扰。😑</p>
-<p>该问题原因发现于该<a href="https://www.mzwu.com/article.asp?id=4411">博文</a>。</p>
-<h3 id="解决方法：">解决方法：</h3>
-<p>Chrome设置的是在用户没有对主页进行主动触发之前无法自动播放及调用播放，首先是诱导点击，提示用户点击操作后方可播放，使用添加allow=&quot;autoplay&quot;属性的iframe。怎么说，这是官方的解决方法，有点膈应人，目前没想到更好的方法，待更新。。。⁉️</p>
-<h3 id="题外话：">题外话：</h3>
-<p>想了好久，发现自己的小项目可以确保播放音乐之前肯定是有交互操作的，需要先添加交互操作，行吧，那没什么问题了。待我想到避开Chrome禁止音频自动播放的好方法。该问题先记录，待更新。。。⁉️</p>
-]]></content>
-      <categories>
-        <category>Chrome</category>
-        <category>Vue</category>
-      </categories>
-      <tags>
-        <tag>Vue</tag>
-        <tag>Chrome</tag>
       </tags>
   </entry>
   <entry>
@@ -354,6 +306,54 @@
 <p>😉👌</p>
 <p>感觉有点小问题。。。</p>
 <p>😳💦</p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>js中回调函数的概念</title>
+    <url>/2021/05/25/js%E4%B8%AD%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
+    <content><![CDATA[<p><em>概要：Js中回调函数的概念…</em></p>
+<span id="more"></span>
+<h2 id="个人理解：">个人理解：</h2>
+<h3 id="回调函数的定义：">回调函数的定义：</h3>
+<p>将一个函数作为参数的形式传入另一个函数中，那么这个函数就是回调函数，另一个函数可以决定在何时何处调用这个传入的回调函数。</p>
+<p>比如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//不传参示例</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//函数foo，callback是接收回调函数的形参，不一定命名为callback</span></span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&quot;a&quot;</span>);<span class="comment">//打印a</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;b&quot;</span>);<span class="comment">//打印b</span></span><br><span class="line">    callback();<span class="comment">//执行回调函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&quot;c&quot;</span>);<span class="comment">//打印c</span></span><br><span class="line">&#125;</span><br><span class="line">foo(f);<span class="comment">//执行foo函数，将f函数作为参数传入，f函数就是回调函数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//传参示例</span></span><br><span class="line"><span class="keyword">var</span> param1 = <span class="string">&quot;a&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">param,callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//param是函数foo接收param1参数的形参</span></span><br><span class="line">    <span class="comment">//函数foo，callback是接收回调函数的形参，不一定命名为callback</span></span><br><span class="line">    <span class="keyword">let</span> param2 = <span class="string">&quot;c&quot;</span></span><br><span class="line">	<span class="built_in">console</span>.log(param);<span class="comment">//打印param1</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;b&quot;</span>);<span class="comment">//打印b</span></span><br><span class="line">    callback(param2);<span class="comment">//执行回调函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">param</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//param为接收param2参数的形参</span></span><br><span class="line">	<span class="built_in">console</span>.log(param)<span class="comment">//打印param2</span></span><br><span class="line">&#125;</span><br><span class="line">foo(param1,f);<span class="comment">//执行foo函数，将param1传入，将f函数作为参数传入，f函数就是回调函数</span></span><br></pre></td></tr></table></figure>
+<h3 id="javascript中回调函数的作用：">javascript中回调函数的作用：</h3>
+<p>1、代码的功能执行位置更清晰</p>
+<p>2、解决异步编程问题，使异步执行操作的执行顺序及先后变得可以控制。异步执行操作有：定时器、建立网络连接、读取网络流数据、向文件写入数据、Ajax提交、请求数据库服务，等等。</p>
+<p>但是，过度的使用回调函数会产生回调地狱问题，因此promise和async、await是解决异步编程的更优方案。</p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JavaScript中__proto__与prototype</title>
+    <url>/2021/05/03/js%E4%B8%AD-proto-%E4%B8%8Eprototype/</url>
+    <content><![CDATA[<p><em>概要：js中__proto__和prototype的区别与个人解读</em></p>
+<span id="more"></span>
+<h4 id="关于js中-proto-和prototype的说明">关于js中__proto__和prototype的说明</h4>
+<h5 id="区别：">区别：</h5>
+<p>__proto__是浏览器对实例化对象中[[prototype]]属性的命名，__proto__是属于对象的属性，prototype是属于函数对象的属性。</p>
+<h5 id="功能：">功能：</h5>
+<p>__proto__是访问prototype的入口。</p>
+<h4 id="个人解读：">个人解读：</h4>
+<h5 id="区别：-v2">区别：</h5>
+<p>prototype可以理解为在函数（函数对象）上的一个名为原型对象的属性，这里的原型对象是命名和功能意义双重含义的，所以prototype是函数（函数对象）上的一个属性，保存原型对象，意义上也可以叫做原型对象。那么这个原型对象的内容是一些可以继承的属性和方法。而__proto__是对象上的一个属性，通过这个属性可以访问prototype这个函数对象上的属性里的内容，也就是说<code>对象.__proto__</code>指向构造该对象的<code>函数.prototype</code>。</p>
+<p>比如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Fn1</span>(<span class="params">...</span>)</span>&#123;...&#125;; <span class="comment">//构造函数</span></span><br><span class="line"><span class="keyword">let</span> obj1 = <span class="keyword">new</span> Fn1(...); <span class="comment">//new一个对象</span></span><br><span class="line">obj1.__proto__ === Fn1.prototype; <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+<p>当然，由于函数在js语言中也是对象，所以也有__proto__属性，指向构造该函数的函数的prototype，一次类推，这就形成了一条原型链，链子的尽头是Object.prototype为null，这个Object非泛指某一个对象，而是实际的构造所有对象的函数。</p>
+<h5 id="补充：">补充：</h5>
+<p>这里还要提一下construct这个属性，理解为构造器，该属性是函数，并挂载在函数的prototype属性上。每一个由函数构造而来的对象都有一个construct属性（继承于构造该对象的函数），该属性功能为访问（获取）构造该对象的构造函数，可以理解为<code>该构造函数.prototype.construct == 该构造函数</code>。<span style="color:red">该构造函数构造的对象.construct</span>继承自<span style="color:red">该构造函数.prototype.construct</span> == <span style="color:red">该构造函数</span></p>
 ]]></content>
       <categories>
         <category>JavaScript</category>
