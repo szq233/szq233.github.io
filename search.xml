@@ -96,33 +96,6 @@
       </tags>
   </entry>
   <entry>
-    <title>js中闭包的概念</title>
-    <url>/2021/05/25/js%E4%B8%AD%E9%97%AD%E5%8C%85%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
-    <content><![CDATA[<p><em>概要：Js中闭包的概念…</em></p>
-<span id="more"></span>
-<h2 id="个人理解：">个人理解：</h2>
-<h3 id="js中闭包的定义💬：">js中闭包的定义💬：</h3>
-<p>一个函数及其对外部某几个参数的引用，形成的一个整体，可以称之为闭包。</p>
-<p>例如：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">()(<span class="keyword">var</span> a = <span class="number">1</span>, b=<span class="number">2</span>;</span><br><span class="line">   <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> a+b;</span><br><span class="line">    &#125;)</span><br><span class="line"><span class="comment">//明显函数foo引用了foo函数外部的两个变量，这个函数和其引用的变量（环境）形成一个整体</span></span><br><span class="line"><span class="comment">//这样一个整体可以称之为闭包</span></span><br></pre></td></tr></table></figure>
-<p>我之前在学习闭包的时候所参照的一些返回函数和内嵌函数的例子，那么这里也简单做个例子：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">&quot;全局变量&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a = <span class="string">&quot;局部变量&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">foo2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(a);</span><br><span class="line">	&#125; </span><br><span class="line">    <span class="keyword">return</span> foo2();</span><br><span class="line">&#125;</span><br><span class="line">foo1();<span class="comment">//打印“局部变量”</span></span><br><span class="line"><span class="comment">//foo2函数和局部变量a参数形成了闭包</span></span><br><span class="line"><span class="comment">//foo1函数实际执行return的foo2函数，foo2与局部变量a形成闭包，所以打印的是局部变量而不是全局变量</span></span><br></pre></td></tr></table></figure>
-<h3 id="那么为什么要这样使用闭包呢❓？">那么为什么要这样使用闭包呢❓？</h3>
-<p>原因是避免全局变量的影响。在es6的let、const新关键字出现之前，javascript只有函数作用域的概念而没有块作用域的概念。使用局部变量则需要函数内部定义，而如何访问到函数内部定义的局部变量，这就是闭包的作用。</p>
-<h3 id="闭包的作用😎：">闭包的作用😎：</h3>
-<p>1、通过闭包可以访问局部变量</p>
-<p>2、可以是局部变量驻留内存中，避免使用全局变量</p>
-<h3 id="闭包的缺陷😐：">闭包的缺陷😐：</h3>
-<p>由于闭包里作用域返回的局部变量资源不会被立刻销毁回收,所以可能会<strong>占用更多的内存</strong>;所以过度使用闭包会导致性能下降;</p>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JavaScript不同数据在内存中存储方式</title>
     <url>/2021/04/29/js%E6%95%B0%E6%8D%AE%E5%9C%A8%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<p><em>概要：Js数据类型在内存中的存储形式…</em></p>
@@ -158,6 +131,33 @@
       </tags>
   </entry>
   <entry>
+    <title>js中闭包的概念</title>
+    <url>/2021/05/25/js%E4%B8%AD%E9%97%AD%E5%8C%85%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
+    <content><![CDATA[<p><em>概要：Js中闭包的概念…</em></p>
+<span id="more"></span>
+<h2 id="个人理解：">个人理解：</h2>
+<h3 id="js中闭包的定义💬：">js中闭包的定义💬：</h3>
+<p>一个函数及其对外部某几个参数的引用，形成的一个整体，可以称之为闭包。</p>
+<p>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">()(<span class="keyword">var</span> a = <span class="number">1</span>, b=<span class="number">2</span>;</span><br><span class="line">   <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> a+b;</span><br><span class="line">    &#125;)</span><br><span class="line"><span class="comment">//明显函数foo引用了foo函数外部的两个变量，这个函数和其引用的变量（环境）形成一个整体</span></span><br><span class="line"><span class="comment">//这样一个整体可以称之为闭包</span></span><br></pre></td></tr></table></figure>
+<p>我之前在学习闭包的时候所参照的一些返回函数和内嵌函数的例子，那么这里也简单做个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">&quot;全局变量&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a = <span class="string">&quot;局部变量&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">foo2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(a);</span><br><span class="line">	&#125; </span><br><span class="line">    <span class="keyword">return</span> foo2();</span><br><span class="line">&#125;</span><br><span class="line">foo1();<span class="comment">//打印“局部变量”</span></span><br><span class="line"><span class="comment">//foo2函数和局部变量a参数形成了闭包</span></span><br><span class="line"><span class="comment">//foo1函数实际执行return的foo2函数，foo2与局部变量a形成闭包，所以打印的是局部变量而不是全局变量</span></span><br></pre></td></tr></table></figure>
+<h3 id="那么为什么要这样使用闭包呢❓？">那么为什么要这样使用闭包呢❓？</h3>
+<p>原因是避免全局变量的影响。在es6的let、const新关键字出现之前，javascript只有函数作用域的概念而没有块作用域的概念。使用局部变量则需要函数内部定义，而如何访问到函数内部定义的局部变量，这就是闭包的作用。</p>
+<h3 id="闭包的作用😎：">闭包的作用😎：</h3>
+<p>1、通过闭包可以访问局部变量</p>
+<p>2、可以是局部变量驻留内存中，避免使用全局变量</p>
+<h3 id="闭包的缺陷😐：">闭包的缺陷😐：</h3>
+<p>由于闭包里作用域返回的局部变量资源不会被立刻销毁回收,所以可能会<strong>占用更多的内存</strong>;所以过度使用闭包会导致性能下降;</p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>newpagename</title>
     <url>/2021/04/27/newpagename/</url>
     <content><![CDATA[<p>测试测试测试测试</p>
@@ -173,21 +173,6 @@
 ]]></content>
       <tags>
         <tag>测试</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>webpack入坑</title>
-    <url>/2021/06/14/webpack%E5%85%A5%E5%9D%91/</url>
-    <content><![CDATA[<h2 id="结论：">结论：</h2>
-<p>webpack不同版本的options不同以及其使用的各个loader和plugin之间的版本差异导致的各种兼容问题真的是巨坑！！！😭</p>
-<h2 id="解决办法：">解决办法：</h2>
-<p>老老实实踩坑。💩</p>
-]]></content>
-      <categories>
-        <category>webpack</category>
-      </categories>
-      <tags>
-        <tag>webpack</tag>
       </tags>
   </entry>
   <entry>
@@ -249,6 +234,21 @@
       <tags>
         <tag>Hexo</tag>
         <tag>NexT</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>webpack入坑</title>
+    <url>/2021/06/14/webpack%E5%85%A5%E5%9D%91/</url>
+    <content><![CDATA[<h2 id="结论：">结论：</h2>
+<p>webpack不同版本的options不同以及其使用的各个loader和plugin之间的版本差异导致的各种兼容问题真的是巨坑！！！😭</p>
+<h2 id="解决办法：">解决办法：</h2>
+<p>老老实实踩坑。💩</p>
+]]></content>
+      <categories>
+        <category>webpack</category>
+      </categories>
+      <tags>
+        <tag>webpack</tag>
       </tags>
   </entry>
   <entry>
@@ -320,6 +320,16 @@
       </categories>
       <tags>
         <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>站点收录测试</title>
+    <url>/2021/11/08/%E7%AB%99%E7%82%B9%E6%94%B6%E5%BD%95%E6%B5%8B%E8%AF%95/</url>
+    <content><![CDATA[<h2 id="这是一篇站点收录测试">这是一篇站点收录测试</h2>
+<p>​	👆👆👆</p>
+]]></content>
+      <tags>
+        <tag>站点</tag>
       </tags>
   </entry>
   <entry>

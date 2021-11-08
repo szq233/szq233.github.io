@@ -6,7 +6,7 @@
   <link href="https://szq233.github.io/atom.xml" rel="self"/>
   
   <link href="https://szq233.github.io/"/>
-  <updated>2021-04-27T15:22:18.000Z</updated>
+  <updated>2021-11-08T12:29:01.998Z</updated>
   <id>https://szq233.github.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>站点收录测试</title>
+    <link href="https://szq233.github.io/2021/11/08/%E7%AB%99%E7%82%B9%E6%94%B6%E5%BD%95%E6%B5%8B%E8%AF%95/"/>
+    <id>https://szq233.github.io/2021/11/08/%E7%AB%99%E7%82%B9%E6%94%B6%E5%BD%95%E6%B5%8B%E8%AF%95/</id>
+    <published>2021-11-08T12:27:44.000Z</published>
+    <updated>2021-11-08T12:29:01.998Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="这是一篇站点收录测试">这是一篇站点收录测试</h2><p>​👆👆👆</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;这是一篇站点收录测试&quot;&gt;这是一篇站点收录测试&lt;/h2&gt;
+&lt;p&gt;​	👆👆👆&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    
+    <category term="站点" scheme="https://szq233.github.io/tags/%E7%AB%99%E7%82%B9/"/>
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
