@@ -33,28 +33,6 @@
       </tags>
   </entry>
   <entry>
-    <title>js中回调函数的概念</title>
-    <url>/2021/05/25/js%E4%B8%AD%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
-    <content><![CDATA[<p><em>概要：Js中回调函数的概念…</em></p>
-<span id="more"></span>
-<h2 id="个人理解：">个人理解：</h2>
-<h3 id="回调函数的定义：">回调函数的定义：</h3>
-<p>将一个函数作为参数的形式传入另一个函数中，那么这个函数就是回调函数，另一个函数可以决定在何时何处调用这个传入的回调函数。</p>
-<p>比如：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//不传参示例</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//函数foo，callback是接收回调函数的形参，不一定命名为callback</span></span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&quot;a&quot;</span>);<span class="comment">//打印a</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;b&quot;</span>);<span class="comment">//打印b</span></span><br><span class="line">    callback();<span class="comment">//执行回调函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&quot;c&quot;</span>);<span class="comment">//打印c</span></span><br><span class="line">&#125;</span><br><span class="line">foo(f);<span class="comment">//执行foo函数，将f函数作为参数传入，f函数就是回调函数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//传参示例</span></span><br><span class="line"><span class="keyword">var</span> param1 = <span class="string">&quot;a&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">param,callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//param是函数foo接收param1参数的形参</span></span><br><span class="line">    <span class="comment">//函数foo，callback是接收回调函数的形参，不一定命名为callback</span></span><br><span class="line">    <span class="keyword">let</span> param2 = <span class="string">&quot;c&quot;</span></span><br><span class="line">	<span class="built_in">console</span>.log(param);<span class="comment">//打印param1</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;b&quot;</span>);<span class="comment">//打印b</span></span><br><span class="line">    callback(param2);<span class="comment">//执行回调函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">param</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//param为接收param2参数的形参</span></span><br><span class="line">	<span class="built_in">console</span>.log(param)<span class="comment">//打印param2</span></span><br><span class="line">&#125;</span><br><span class="line">foo(param1,f);<span class="comment">//执行foo函数，将param1传入，将f函数作为参数传入，f函数就是回调函数</span></span><br></pre></td></tr></table></figure>
-<h3 id="javascript中回调函数的作用：">javascript中回调函数的作用：</h3>
-<p>1、代码的功能执行位置更清晰</p>
-<p>2、解决异步编程问题，使异步执行操作的执行顺序及先后变得可以控制。异步执行操作有：定时器、建立网络连接、读取网络流数据、向文件写入数据、Ajax提交、请求数据库服务，等等。</p>
-<p>但是，过度的使用回调函数会产生回调地狱问题，因此promise和async、await是解决异步编程的更优方案。</p>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>js中的arguments和...args</title>
     <url>/2021/06/04/js%E4%B8%AD%E7%9A%84arguments%E5%92%8C-args/</url>
     <content><![CDATA[<p><em>概要：学习express中间件原理时候遇到的arguments对象和…args形参，从一脸懵逼到简单认识…</em></p>
@@ -87,6 +65,33 @@
 <p>没错，对数组进行了解构，将[1, 2, 3]解构成了1,2,3，它可以将可遍历的数组，对象甚至是字符串进行解构，再进行赋值，就可以实现数组复制，对象复制，字符串转换数组等功能。</p>
 <h2 id="结束语：">结束语：</h2>
 <p>JavaScript基础知识内容太多了！😤😭</p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>js中闭包的概念</title>
+    <url>/2021/05/25/js%E4%B8%AD%E9%97%AD%E5%8C%85%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
+    <content><![CDATA[<p><em>概要：Js中闭包的概念…</em></p>
+<span id="more"></span>
+<h2 id="个人理解：">个人理解：</h2>
+<h3 id="js中闭包的定义💬：">js中闭包的定义💬：</h3>
+<p>一个函数及其对外部某几个参数的引用，形成的一个整体，可以称之为闭包。</p>
+<p>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">()(<span class="keyword">var</span> a = <span class="number">1</span>, b=<span class="number">2</span>;</span><br><span class="line">   <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> a+b;</span><br><span class="line">    &#125;)</span><br><span class="line"><span class="comment">//明显函数foo引用了foo函数外部的两个变量，这个函数和其引用的变量（环境）形成一个整体</span></span><br><span class="line"><span class="comment">//这样一个整体可以称之为闭包</span></span><br></pre></td></tr></table></figure>
+<p>我之前在学习闭包的时候所参照的一些返回函数和内嵌函数的例子，那么这里也简单做个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">&quot;全局变量&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a = <span class="string">&quot;局部变量&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">foo2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(a);</span><br><span class="line">	&#125; </span><br><span class="line">    <span class="keyword">return</span> foo2();</span><br><span class="line">&#125;</span><br><span class="line">foo1();<span class="comment">//打印“局部变量”</span></span><br><span class="line"><span class="comment">//foo2函数和局部变量a参数形成了闭包</span></span><br><span class="line"><span class="comment">//foo1函数实际执行return的foo2函数，foo2与局部变量a形成闭包，所以打印的是局部变量而不是全局变量</span></span><br></pre></td></tr></table></figure>
+<h3 id="那么为什么要这样使用闭包呢❓？">那么为什么要这样使用闭包呢❓？</h3>
+<p>原因是避免全局变量的影响。在es6的let、const新关键字出现之前，javascript只有函数作用域的概念而没有块作用域的概念。使用局部变量则需要函数内部定义，而如何访问到函数内部定义的局部变量，这就是闭包的作用。</p>
+<h3 id="闭包的作用😎：">闭包的作用😎：</h3>
+<p>1、通过闭包可以访问局部变量</p>
+<p>2、可以是局部变量驻留内存中，避免使用全局变量</p>
+<h3 id="闭包的缺陷😐：">闭包的缺陷😐：</h3>
+<p>由于闭包里作用域返回的局部变量资源不会被立刻销毁回收,所以可能会<strong>占用更多的内存</strong>;所以过度使用闭包会导致性能下降;</p>
 ]]></content>
       <categories>
         <category>JavaScript</category>
@@ -131,33 +136,6 @@
       </tags>
   </entry>
   <entry>
-    <title>js中闭包的概念</title>
-    <url>/2021/05/25/js%E4%B8%AD%E9%97%AD%E5%8C%85%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
-    <content><![CDATA[<p><em>概要：Js中闭包的概念…</em></p>
-<span id="more"></span>
-<h2 id="个人理解：">个人理解：</h2>
-<h3 id="js中闭包的定义💬：">js中闭包的定义💬：</h3>
-<p>一个函数及其对外部某几个参数的引用，形成的一个整体，可以称之为闭包。</p>
-<p>例如：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">()(<span class="keyword">var</span> a = <span class="number">1</span>, b=<span class="number">2</span>;</span><br><span class="line">   <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> a+b;</span><br><span class="line">    &#125;)</span><br><span class="line"><span class="comment">//明显函数foo引用了foo函数外部的两个变量，这个函数和其引用的变量（环境）形成一个整体</span></span><br><span class="line"><span class="comment">//这样一个整体可以称之为闭包</span></span><br></pre></td></tr></table></figure>
-<p>我之前在学习闭包的时候所参照的一些返回函数和内嵌函数的例子，那么这里也简单做个例子：</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">&quot;全局变量&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo1</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a = <span class="string">&quot;局部变量&quot;</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">foo2</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(a);</span><br><span class="line">	&#125; </span><br><span class="line">    <span class="keyword">return</span> foo2();</span><br><span class="line">&#125;</span><br><span class="line">foo1();<span class="comment">//打印“局部变量”</span></span><br><span class="line"><span class="comment">//foo2函数和局部变量a参数形成了闭包</span></span><br><span class="line"><span class="comment">//foo1函数实际执行return的foo2函数，foo2与局部变量a形成闭包，所以打印的是局部变量而不是全局变量</span></span><br></pre></td></tr></table></figure>
-<h3 id="那么为什么要这样使用闭包呢❓？">那么为什么要这样使用闭包呢❓？</h3>
-<p>原因是避免全局变量的影响。在es6的let、const新关键字出现之前，javascript只有函数作用域的概念而没有块作用域的概念。使用局部变量则需要函数内部定义，而如何访问到函数内部定义的局部变量，这就是闭包的作用。</p>
-<h3 id="闭包的作用😎：">闭包的作用😎：</h3>
-<p>1、通过闭包可以访问局部变量</p>
-<p>2、可以是局部变量驻留内存中，避免使用全局变量</p>
-<h3 id="闭包的缺陷😐：">闭包的缺陷😐：</h3>
-<p>由于闭包里作用域返回的局部变量资源不会被立刻销毁回收,所以可能会<strong>占用更多的内存</strong>;所以过度使用闭包会导致性能下降;</p>
-]]></content>
-      <categories>
-        <category>JavaScript</category>
-      </categories>
-      <tags>
-        <tag>JavaScript</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>newpagename</title>
     <url>/2021/04/27/newpagename/</url>
     <content><![CDATA[<p>测试测试测试测试</p>
@@ -173,6 +151,21 @@
 ]]></content>
       <tags>
         <tag>测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>webpack入坑</title>
+    <url>/2021/06/14/webpack%E5%85%A5%E5%9D%91/</url>
+    <content><![CDATA[<h2 id="结论：">结论：</h2>
+<p>webpack不同版本的options不同以及其使用的各个loader和plugin之间的版本差异导致的各种兼容问题真的是巨坑！！！😭</p>
+<h2 id="解决办法：">解决办法：</h2>
+<p>老老实实踩坑。💩</p>
+]]></content>
+      <categories>
+        <category>webpack</category>
+      </categories>
+      <tags>
+        <tag>webpack</tag>
       </tags>
   </entry>
   <entry>
@@ -237,51 +230,6 @@
       </tags>
   </entry>
   <entry>
-    <title>webpack入坑</title>
-    <url>/2021/06/14/webpack%E5%85%A5%E5%9D%91/</url>
-    <content><![CDATA[<h2 id="结论：">结论：</h2>
-<p>webpack不同版本的options不同以及其使用的各个loader和plugin之间的版本差异导致的各种兼容问题真的是巨坑！！！😭</p>
-<h2 id="解决办法：">解决办法：</h2>
-<p>老老实实踩坑。💩</p>
-]]></content>
-      <categories>
-        <category>webpack</category>
-      </categories>
-      <tags>
-        <tag>webpack</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>最近做vue音乐小项目遇到的坑</title>
-    <url>/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
-    <content><![CDATA[<p><em>概要：Chrome测试Vue音乐小项目出现的坑</em></p>
-<span id="more"></span>
-<h1>1.audio元素</h1>
-<p><em>Chrome等浏览器禁止音频自动播放以及操作Dom元素播放。</em></p>
-<p>使用Vue制作类网易云音乐单页面应用，准备使用隐藏audio元素，使用自己封装的音乐控件来获取并控制该audio元素的方法实现音乐控制的功能，但在引入单个audio的src测试时就出现了问题。</p>
-<p>首先是为了测试，为了方便查看效果，我将audio元素添加autoplay以实现自动播放，结果是失败，几乎不生效偶尔有效，我为元素添加上controls，发现直接点击控制器的播放按钮是可以正常播放音乐的。</p>
-<p><img src="/.io//Snipaste_2021-06-23_03-54-24.png" alt></p>
-<p>好，既然自带属性无效，那我直接获取元素对象操作它的play()，在该模块mounted阶段执行play()（通过vuex状态中的全局音乐是否播放的表示变量判断是否执行）。废话不多时，代码敲上，好家伙直接报错。如图。</p>
-<p><img src="/.io//Snipaste_2021-06-23_03-56-23.png" alt></p>
-<p>这意思是不让我操作audio的dom元素的play()方法？完，我自定义控件能控制audio就是靠这些audio对象的方法，这样还咋搞？我赶紧面向百度编程，惊喜的是，还真给我找到了原因和解决方法！😮</p>
-<h3 id="原因：">原因：</h3>
-<p>在新版Chrome浏览器（包括所有与Chrome使用相同内核的浏览器）中，已经不在允许自动播放音频和视频，设置了autoplay属性也一样不行。显示调用play()方法就如我之前的那样报错，这是因为，Chrome只允许用户对网页进行主动触发后才可自动播放音频和视频。严格地来说，是Chrome不允许在用户对网页进行触发之前播放音频，而视频其实是不受限制的。但因为视频文件同样包含了音频，所以也一同被禁止了。Chrome这样做的目的是为了防止开发者滥用自动播放功能而对用户产生骚扰。😑</p>
-<p>该问题原因发现于该<a href="https://www.mzwu.com/article.asp?id=4411">博文</a>。</p>
-<h3 id="解决方法：">解决方法：</h3>
-<p>Chrome设置的是在用户没有对主页进行主动触发之前无法自动播放及调用播放，首先是诱导点击，提示用户点击操作后方可播放，使用添加allow=&quot;autoplay&quot;属性的iframe。怎么说，这是官方的解决方法，有点膈应人，目前没想到更好的方法，待更新。。。⁉️</p>
-<h3 id="题外话：">题外话：</h3>
-<p>想了好久，发现自己的小项目可以确保播放音乐之前肯定是有交互操作的，需要先添加交互操作，行吧，那没什么问题了。待我想到避开Chrome禁止音频自动播放的好方法。该问题先记录，待更新。。。⁉️</p>
-]]></content>
-      <categories>
-        <category>Chrome</category>
-        <category>Vue</category>
-      </categories>
-      <tags>
-        <tag>Vue</tag>
-        <tag>Chrome</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>正向代理与反向代理</title>
     <url>/2021/05/16/%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
     <content><![CDATA[<p><em>概要：正向代理与反向代理的简述和区别…</em></p>
@@ -320,6 +268,58 @@
       </categories>
       <tags>
         <tag>服务器</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>js中回调函数的概念</title>
+    <url>/2021/05/25/js%E4%B8%AD%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E7%9A%84%E6%A6%82%E5%BF%B5/</url>
+    <content><![CDATA[<p><em>概要：Js中回调函数的概念…</em></p>
+<span id="more"></span>
+<h2 id="个人理解：">个人理解：</h2>
+<h3 id="回调函数的定义：">回调函数的定义：</h3>
+<p>将一个函数作为参数的形式传入另一个函数中，那么这个函数就是回调函数，另一个函数可以决定在何时何处调用这个传入的回调函数。</p>
+<p>比如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">//不传参示例</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//函数foo，callback是接收回调函数的形参，不一定命名为callback</span></span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&quot;a&quot;</span>);<span class="comment">//打印a</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;b&quot;</span>);<span class="comment">//打印b</span></span><br><span class="line">    callback();<span class="comment">//执行回调函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&quot;c&quot;</span>);<span class="comment">//打印c</span></span><br><span class="line">&#125;</span><br><span class="line">foo(f);<span class="comment">//执行foo函数，将f函数作为参数传入，f函数就是回调函数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//传参示例</span></span><br><span class="line"><span class="keyword">var</span> param1 = <span class="string">&quot;a&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">param,callback</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//param是函数foo接收param1参数的形参</span></span><br><span class="line">    <span class="comment">//函数foo，callback是接收回调函数的形参，不一定命名为callback</span></span><br><span class="line">    <span class="keyword">let</span> param2 = <span class="string">&quot;c&quot;</span></span><br><span class="line">	<span class="built_in">console</span>.log(param);<span class="comment">//打印param1</span></span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;b&quot;</span>);<span class="comment">//打印b</span></span><br><span class="line">    callback(param2);<span class="comment">//执行回调函数</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">param</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//param为接收param2参数的形参</span></span><br><span class="line">	<span class="built_in">console</span>.log(param)<span class="comment">//打印param2</span></span><br><span class="line">&#125;</span><br><span class="line">foo(param1,f);<span class="comment">//执行foo函数，将param1传入，将f函数作为参数传入，f函数就是回调函数</span></span><br></pre></td></tr></table></figure>
+<h3 id="javascript中回调函数的作用：">javascript中回调函数的作用：</h3>
+<p>1、代码的功能执行位置更清晰</p>
+<p>2、解决异步编程问题，使异步执行操作的执行顺序及先后变得可以控制。异步执行操作有：定时器、建立网络连接、读取网络流数据、向文件写入数据、Ajax提交、请求数据库服务，等等。</p>
+<p>但是，过度的使用回调函数会产生回调地狱问题，因此promise和async、await是解决异步编程的更优方案。</p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>最近做vue音乐小项目遇到的坑</title>
+    <url>/2021/06/23/%E6%9C%80%E8%BF%91%E5%81%9Avue%E9%9F%B3%E4%B9%90%E5%B0%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
+    <content><![CDATA[<p><em>概要：Chrome测试Vue音乐小项目出现的坑</em></p>
+<span id="more"></span>
+<h1>1.audio元素</h1>
+<p><em>Chrome等浏览器禁止音频自动播放以及操作Dom元素播放。</em></p>
+<p>使用Vue制作类网易云音乐单页面应用，准备使用隐藏audio元素，使用自己封装的音乐控件来获取并控制该audio元素的方法实现音乐控制的功能，但在引入单个audio的src测试时就出现了问题。</p>
+<p>首先是为了测试，为了方便查看效果，我将audio元素添加autoplay以实现自动播放，结果是失败，几乎不生效偶尔有效，我为元素添加上controls，发现直接点击控制器的播放按钮是可以正常播放音乐的。</p>
+<p><img src="/.io//Snipaste_2021-06-23_03-54-24.png" alt></p>
+<p>好，既然自带属性无效，那我直接获取元素对象操作它的play()，在该模块mounted阶段执行play()（通过vuex状态中的全局音乐是否播放的表示变量判断是否执行）。废话不多时，代码敲上，好家伙直接报错。如图。</p>
+<p><img src="/.io//Snipaste_2021-06-23_03-56-23.png" alt></p>
+<p>这意思是不让我操作audio的dom元素的play()方法？完，我自定义控件能控制audio就是靠这些audio对象的方法，这样还咋搞？我赶紧面向百度编程，惊喜的是，还真给我找到了原因和解决方法！😮</p>
+<h3 id="原因：">原因：</h3>
+<p>在新版Chrome浏览器（包括所有与Chrome使用相同内核的浏览器）中，已经不在允许自动播放音频和视频，设置了autoplay属性也一样不行。显示调用play()方法就如我之前的那样报错，这是因为，Chrome只允许用户对网页进行主动触发后才可自动播放音频和视频。严格地来说，是Chrome不允许在用户对网页进行触发之前播放音频，而视频其实是不受限制的。但因为视频文件同样包含了音频，所以也一同被禁止了。Chrome这样做的目的是为了防止开发者滥用自动播放功能而对用户产生骚扰。😑</p>
+<p>该问题原因发现于该<a href="https://www.mzwu.com/article.asp?id=4411">博文</a>。</p>
+<h3 id="解决方法：">解决方法：</h3>
+<p>Chrome设置的是在用户没有对主页进行主动触发之前无法自动播放及调用播放，首先是诱导点击，提示用户点击操作后方可播放，使用添加allow=&quot;autoplay&quot;属性的iframe。怎么说，这是官方的解决方法，有点膈应人，目前没想到更好的方法，待更新。。。⁉️</p>
+<h3 id="题外话：">题外话：</h3>
+<p>想了好久，发现自己的小项目可以确保播放音乐之前肯定是有交互操作的，需要先添加交互操作，行吧，那没什么问题了。待我想到避开Chrome禁止音频自动播放的好方法。该问题先记录，待更新。。。⁉️</p>
+]]></content>
+      <categories>
+        <category>Chrome</category>
+        <category>Vue</category>
+      </categories>
+      <tags>
+        <tag>Vue</tag>
+        <tag>Chrome</tag>
       </tags>
   </entry>
   <entry>
